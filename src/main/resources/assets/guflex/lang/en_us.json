@@ -1,0 +1,13 @@
+{
+  "itemGroup.guflex": "Example Mod Tab",
+  "block.guflex.example_block": "Example Block",
+  "item.guflex.example_item": "Example Item",
+
+  "guflex.configuration.title": "GuFlex Configs",
+  "guflex.configuration.section.guflex.common.toml": "GuFlex Configs",
+  "guflex.configuration.section.guflex.common.toml.title": "GuFlex Configs",
+  "guflex.configuration.items": "Item List",
+  "guflex.configuration.logDirtBlock": "Log Dirt Block",
+  "guflex.configuration.magicNumberIntroduction": "Magic Number Text",
+  "guflex.configuration.magicNumber": "Magic Number"
+}

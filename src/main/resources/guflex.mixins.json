@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "guni.guflex.core.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinAbstractContainerScreen"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
