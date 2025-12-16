@@ -21,8 +21,7 @@ public class ItemLoopWidget extends FlexWidget {
         this.items = items;
         this.swapTimer = swapTimer;
 
-        addStyle(Style.WIDTH, "16px");
-        addStyle(Style.HEIGHT, "16px");
+        getStyle().setWidth("16px").setHeight("16px");
 
         eventHandler.registerRenderEvent(this::onRender);
         eventHandler.registerScreenTickEvent(this::onTick);

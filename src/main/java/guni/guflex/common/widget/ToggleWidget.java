@@ -18,20 +18,17 @@ public class ToggleWidget extends FlexWidget {
 
         this.value = value;
 
-        addStyle(Style.WIDTH, Style.WRAP);
-        addStyle(Style.HEIGHT, Style.WRAP);
-        addStyle(Style.PADDING_LEFT, "5px");
-        addStyle(Style.PADDING_RIGHT, "5px");
-        addStyle(Style.PADDING_TOP, "5px");
-        addStyle(Style.PADDING_BOTTOM, "5px");
-        addStyle(Style.ITEM_SPACING, "5px");
+        getStyle()
+                .setWidth(Style.WRAP).setHeight(Style.WRAP)
+                .setPaddingLeft("5px").setPaddingRight("5px").setPaddingTop("5px").setPaddingBottom("5px")
+                .setItemSpacing("5px");
 
         toggleBox = new SpriteWidget(this.value ? Internals.getTextures().toggle_box_full : Internals.getTextures().toggle_box_empty);
-        toggleBox.addStyle(Style.WIDTH, "15");
-        toggleBox.addStyle(Style.HEIGHT, "15");
+        toggleBox.getStyle()
+                .setWidth("15").setHeight("15");
         addChild(toggleBox);
 
-        eventHandler.registerMouseClickedEvent(this::onMouseClicked);
+        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
         eventHandler.registerWidgetRemovedEvent(this::onRemoved);
     }
 
@@ -39,7 +36,7 @@ public class ToggleWidget extends FlexWidget {
         onValueChanged.release();
     }
 
-    protected boolean onMouseClicked(IMouseClickedEvent.Data data){
+    protected boolean onMouseClickedUnconsumed(IMouseClickedEvent.Data data){
         if (!rect().contains(data.mouseX(), data.mouseY())) return false;
 
         switchValue();

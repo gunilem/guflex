@@ -28,8 +28,8 @@ public class ToggleButtonWidget extends ButtonWidget {
     }
 
     @Override
-    protected boolean onMouseClicked(IMouseClickedEvent.Data data){
-        if (super.onMouseClicked(data)){
+    protected boolean onMouseClickedUnconsumed(IMouseClickedEvent.Data data){
+        if (super.onMouseClickedUnconsumed(data)){
             value = !value;
             onValueChanged.invoke(value);
             updateBackground();

@@ -7,12 +7,11 @@ import guni.guflex.api.event.widgetEvents.*;
 import guni.guflex.api.runtime.drawable.IDrawable;
 import guni.guflex.api.runtime.screen.IFlexScreen;
 import guni.guflex.api.style.FlexRect;
-import guni.guflex.api.style.FlexSpecs;
+import guni.guflex.api.style.FlexStyle;
 import guni.guflex.api.style.IStyleSpec;
 import guni.guflex.core.registers.Internals;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 import java.util.*;
@@ -22,7 +21,7 @@ public class FlexWidget implements IFlexWidget {
 
     protected FlexWidgetEventHandler eventHandler;
     protected FlexRect bounds;
-    protected FlexSpecs specs;
+    protected FlexStyle style;
     protected List<IFlexWidget> children;
     protected boolean displayed = true;
     protected boolean displayedInHierarchy = true;
@@ -33,11 +32,12 @@ public class FlexWidget implements IFlexWidget {
     public FlexWidget(){
         eventHandler = new FlexWidgetEventHandler();
         bounds = FlexRect.EMPTY();
-        specs = FlexSpecs.DEFAULT();
+        style = new FlexStyle(eventHandler);
         children = new ArrayList<>();
 
         eventHandler.registerRenderBackgroundEvent(this::onRenderBackground);
         eventHandler.registerRenderDebugEvent(this::onRenderDebug);
+        eventHandler.registerRenderTooltipsEvent(this::onRenderTooltips);
     }
 
     protected void onRenderBackground(IRenderBackgroundEvent.Data data) {
@@ -170,6 +170,14 @@ public class FlexWidget implements IFlexWidget {
         }
     }
 
+    protected boolean onRenderTooltips(IRenderTooltipsEvent.Data event){
+        if (tooltips.isEmpty()) return false;
+        if (!rect().contains(event.mouseX(), event.mouseY())) return false;
+
+        event.guiGraphics().renderTooltip(Minecraft.getInstance().font, tooltips, Optional.empty(), event.mouseX(), event.mouseY());
+        return true;
+    }
+
     public void setBackground(IDrawable background){
         this.background = background;
     }
@@ -187,9 +195,10 @@ public class FlexWidget implements IFlexWidget {
     }
 
     @Override
-    public IStyleSpec style(String key) {
-        return specs.getStyle(key);
+    public FlexStyle getStyle() {
+        return style;
     }
+
     @Override
     public List<IFlexWidget> children() {
         return children;
@@ -206,33 +215,25 @@ public class FlexWidget implements IFlexWidget {
     public boolean renderable() { return rect().renderable() && displayed() ; }
 
     @Override
-    public void addStyle(String key, String value) { specs.addStyle(key, value); }
-
+    public void show() { displayed = true; setHierarchyDisplayedProperty(true); handleShownEvent(); style.setDirty(); }
     @Override
-    public void setDirty() {
-        if (Minecraft.getInstance().screen instanceof IFlexScreen screen) screen.onHierarchyUpdated();
-        specs.isDirty = true;
-    }
-
-    @Override
-    public boolean isDirty() {
-        return specs.isDirty;
-    }
-
-    @Override
-    public void show() { displayed = true; setHierarchyDisplayedProperty(true); handleShownEvent(); setDirty(); }
-    @Override
-    public void hide() { displayed = false; setHierarchyDisplayedProperty(false); handleHiddenEvent(); setDirty(); }
+    public void hide() { displayed = false; setHierarchyDisplayedProperty(false); handleHiddenEvent();  style.setDirty(); }
 
     @Override
     public void addChild(IFlexWidget child) {
-        if (Minecraft.getInstance().screen instanceof IFlexScreen screen) screen.addDelayOperation(() -> children.add(child));
-        setDirty();
+        if (Minecraft.getInstance().screen instanceof IFlexScreen screen) screen.addDelayOperation(() -> {
+            children.add(child);
+            handleChildAddedEvent(new IWidgetChildAddedEvent.Data(child));
+        });
+        style.setDirty();
     }
     @Override
     public void removeChild(IFlexWidget child) {
-        if (Minecraft.getInstance().screen instanceof IFlexScreen screen) screen.addDelayOperation(() -> children.remove(child));
-        setDirty();
+        if (Minecraft.getInstance().screen instanceof IFlexScreen screen) screen.addDelayOperation(() -> {
+            children.remove(child);
+            handleChildRemovedEvent(new IWidgetChildRemovedEvent.Data(child));
+        });
+        style.setDirty();
     }
     @Override
     public void removeAllChild(){
@@ -243,9 +244,8 @@ public class FlexWidget implements IFlexWidget {
 
     @Override
     public void recomputeLayout(IFlexWidget parent){
-        specs.measure(parent, this);
-        specs.position(parent, this);
-        specs.isDirty = false;
+        style.measure(parent, this);
+        style.position(parent, this);
     }
 
     public void addTooltip(Component tooltip){
@@ -267,10 +267,10 @@ public class FlexWidget implements IFlexWidget {
     }
 
     public boolean checkDirty(){
-        if (isDirty()) { return true; }
+        if (style.isDirty()) { return true; }
         for (IFlexWidget child : children){
             if (child.checkDirty()){
-                if (specs.dependsOnChildren) return true;
+                if (style.dependsOnChildren) return true;
                 else child.recomputeLayout(this);
             }
         }
@@ -282,8 +282,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleMouseClickedEvent(event, consumed);
         }
+        eventHandler.invokeMouseClickedEvent(event);
         if (consumed) eventHandler.invokeMouseClickedConsumedEvent(event);
-        else consumed = eventHandler.invokeMouseClickedEvent(event);
+        else consumed = eventHandler.invokeMouseClickedUnconsumedEvent(event);
         return consumed;
     }
     public boolean handleMouseReleasedEvent(IMouseReleasedEvent.Data event, boolean consumed){
@@ -291,8 +292,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleMouseReleasedEvent(event, consumed);
         }
+        eventHandler.invokeMouseReleasedEvent(event);
         if (consumed) eventHandler.invokeMouseReleasedConsumedEvent(event);
-        else consumed = eventHandler.invokeMouseReleasedEvent(event);
+        else consumed = eventHandler.invokeMouseReleasedUnconsumedEvent(event);
         return consumed;
     }
     public boolean handleMouseScrolledEvent(IMouseScrolledEvent.Data event, boolean consumed){
@@ -300,8 +302,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleMouseScrolledEvent(event, consumed);
         }
+        eventHandler.invokeMouseScrolledEvent(event);
         if (consumed) eventHandler.invokeMouseScrolledConsumedEvent(event);
-        else consumed = eventHandler.invokeMouseScrolledEvent(event);
+        else consumed = eventHandler.invokeMouseScrolledUnconsumedEvent(event);
         return consumed;
     }
     public boolean handleMouseDraggedEvent(IMouseDraggedEvent.Data event, boolean consumed){
@@ -309,16 +312,20 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleMouseDraggedEvent(event, consumed);
         }
+        eventHandler.invokeMouseDraggedEvent(event);
         if (consumed) eventHandler.invokeMouseDraggedConsumedEvent(event);
-        else consumed = eventHandler.invokeMouseDraggedEvent(event);
+        else consumed = eventHandler.invokeMouseDraggedUnconsumedEvent(event);
         return consumed;
     }
-    public void handleMouseMovedEvent(IMouseMovedEvent.Data event){
-        if (!renderable()) return;
-        eventHandler.invokeMouseMovedEvent(event);
+    public boolean handleMouseMovedEvent(IMouseMovedEvent.Data event, boolean consumed){
+        if (!renderable()) return false;
         for (IFlexWidget child : children){
-            child.handleMouseMovedEvent(event);
+            consumed = child.handleMouseMovedEvent(event, consumed);
         }
+        eventHandler.invokeMouseMovedEvent(event);
+        if (consumed) eventHandler.invokeMouseMovedConsumedEvent(event);
+        else consumed = eventHandler.invokeMouseMovedUnconsumedEvent(event);
+        return consumed;
     }
 
     public boolean handleKeyPressedEvent(IKeyPressedEvent.Data event, boolean consumed){
@@ -326,8 +333,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleKeyPressedEvent(event, consumed);
         }
+        eventHandler.invokeKeyPressedEvent(event);
         if (consumed) eventHandler.invokeKeyPressedConsumedEvent(event);
-        else consumed = eventHandler.invokeKeyPressedEvent(event);
+        else consumed = eventHandler.invokeKeyPressedUnconsumedEvent(event);
         return consumed;
     }
     public boolean handleKeyReleasedEvent(IKeyReleasedEvent.Data event, boolean consumed){
@@ -335,8 +343,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleKeyReleasedEvent(event, consumed);
         }
+        eventHandler.invokeKeyReleasedEvent(event);
         if (consumed) eventHandler.invokeKeyReleasedConsumedEvent(event);
-        else consumed = eventHandler.invokeKeyReleasedEvent(event);
+        else consumed = eventHandler.invokeKeyReleasedUnconsumedEvent(event);
         return consumed;
     }
     public boolean handleCharTypedEvent(ICharTypedEvent.Data event, boolean consumed){
@@ -344,10 +353,13 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleCharTypedEvent(event, consumed);
         }
+        eventHandler.invokeCharTypedEvent(event);
         if (consumed) eventHandler.invokeCharTypedConsumedEvent(event);
-        else consumed = eventHandler.invokeCharTypedEvent(event);
+        else consumed = eventHandler.invokeCharTypedUnconsumedEvent(event);
         return consumed;
     }
+
+
 
     public void handleRenderEvent(IRenderEvent.Data event){
         if (!renderable()) return;
@@ -416,15 +428,11 @@ public class FlexWidget implements IFlexWidget {
 
     public void handleChildAddedEvent(IWidgetChildAddedEvent.Data event){
         eventHandler.invokeWidgetChildAddedEvent(event);
-        for (IFlexWidget child : children){
-            child.handleChildAddedEvent(event);
-        }
+        event.widget().handleAddedEvent();
     }
     public void handleChildRemovedEvent(IWidgetChildRemovedEvent.Data event){
         eventHandler.invokeWidgetChildRemovedEvent(event);
-        for (IFlexWidget child : children){
-            child.handleChildRemovedEvent(event);
-        }
+        event.widget().handleRemovedEvent();
     }
 
     public void handleMeasuredEvent(){ eventHandler.invokeWidgetMeasuredEvent(); }

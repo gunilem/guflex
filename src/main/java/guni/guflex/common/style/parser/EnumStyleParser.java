@@ -7,33 +7,11 @@ import guni.guflex.common.style.EnumStyle;
 
 import java.util.function.Function;
 
-public class EnumStyleParser implements IStyleParser {
-
-    protected String propertyKey;
-    protected String[] values;
-    protected IStyleSpec defaultStyle;
-
-    public EnumStyleParser(String key, IStyleSpec defaultStyle, String... values){
-        this.propertyKey = key;
-        this.values = values;
-        this.defaultStyle = defaultStyle;
-    }
-
-    @Override
-    public String getPropertyKey() {
-        return propertyKey;
-    }
-
-    @Override
-    public IStyleSpec getDefault() {
-        return defaultStyle;
-    }
-
-    @Override
-    public IStyleSpec parse(String data) {
+public class EnumStyleParser {
+    public static String parse(String data, String... values) {
         for (String value : values){
             if (data.equals(value)){
-                return new EnumStyle(data);
+                return data;
             }
         }
 

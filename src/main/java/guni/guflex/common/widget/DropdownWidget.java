@@ -23,18 +23,14 @@ public class DropdownWidget<T extends Enum<?>> extends FlexWidget {
 
         currentValue = data[0];
 
-        addStyle(Style.WIDTH, Style.WRAP);
-        addStyle(Style.HEIGHT, Style.WRAP);
 
-        valueLabel = new LabelWidget(Component.literal(currentValue.name()), false, false);
+        valueLabel = new LabelWidget(Component.literal(currentValue.name()), false, false, false);
         addChild(valueLabel);
 
-        addStyle(Style.PADDING_LEFT, "5px");
-        addStyle(Style.PADDING_RIGHT, "5px");
-        addStyle(Style.PADDING_TOP, "5px");
-        addStyle(Style.PADDING_BOTTOM, "5px");
+        getStyle().setWidth(Style.WRAP).setHeight(Style.WRAP)
+                .setPaddingLeft("5px").setPaddingRight("5px").setPaddingTop("5px").setPaddingBottom("5px");
 
-        eventHandler.registerMouseClickedEvent(this::onMouseClicked);
+        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
 
         eventHandler.registerWidgetRemovedEvent(this::onRemoved);
     }
@@ -43,7 +39,7 @@ public class DropdownWidget<T extends Enum<?>> extends FlexWidget {
         onValueChanged.release();
     }
 
-    protected boolean onMouseClicked(IMouseClickedEvent.Data data){
+    protected boolean onMouseClickedUnconsumed(IMouseClickedEvent.Data data){
         if (!rect().contains(data.mouseX(), data.mouseY())) return false;
 
         openPopup();
@@ -59,24 +55,17 @@ public class DropdownWidget<T extends Enum<?>> extends FlexWidget {
     protected void openPopup(){
         BaseFlexPopup popup = new BaseFlexPopup(false, false, true, false, 1500);
         popup.defineName("Dropdown popup");
-        popup.addStyle(Style.WIDTH, "75");
-        popup.addStyle(Style.HEIGHT,  Style.WRAP);
-        popup.contentWidget.addStyle(Style.WIDTH, "100%");
-        popup.contentWidget.addStyle(Style.HEIGHT, Style.WRAP);
-        popup.contentWidget.addStyle(Style.FLEX_DIRECTION,  Style.VERTICAL);
+        popup.getStyle().setWidth("75").setHeight(Style.WRAP);
+        popup.contentWidget.getStyle().setWidth("100%").setHeight(Style.WRAP)
+                .setFlexDirection(Style.VERTICAL);
 
         for (T value : data){
-            LabelWidget label = new LabelWidget(Component.literal(value.name()), false, false);
+            LabelWidget label = new LabelWidget(Component.literal(value.name()), false, false, false);
             ButtonWidget button = new ButtonWidget();
             button.setBackground(Internals.getTextures().button_background);
-            button.addStyle(Style.WIDTH, "100%");
-            button.addStyle(Style.HEIGHT, Style.WRAP);
-            button.addStyle(Style.BOX_SIZING_X, Style.BORDER_BOX);
-            button.addStyle(Style.BOX_SIZING_Y, Style.CONTENT_BOX);
-            button.addStyle(Style.PADDING_LEFT, "5px");
-            button.addStyle(Style.PADDING_RIGHT, "5px");
-            button.addStyle(Style.PADDING_TOP, "5px");
-            button.addStyle(Style.PADDING_BOTTOM, "5px");
+            button.getStyle().setWidth("100%").setHeight(Style.WRAP)
+                    .setBoxSizingX(Style.BORDER_BOX).setBoxSizingY(Style.CONTENT_BOX)
+                    .setPaddingLeft("5px").setPaddingRight("5px").setPaddingTop("5px").setPaddingBottom("5px");
             button.addChild(label);
             button.onclick.register((a, b) -> {
                 switchValue(value);

@@ -34,23 +34,21 @@ public class ScrollingViewWidget extends FlexWidget {
         this.allItems = new ArrayList<>();
 
         contentWidget = new FlexWidget();
-        contentWidget.addStyle(Style.WIDTH, scrollingDirection != ScrollingDirection.Horizontal ? "100%" : Style.WRAP);
-        contentWidget.addStyle(Style.HEIGHT, scrollingDirection != ScrollingDirection.Vertical ? "100%" : Style.WRAP);
-        contentWidget.addStyle(Style.FLEX_DIRECTION, Style.VERTICAL);
+        contentWidget.getStyle()
+                .setWidth(scrollingDirection != ScrollingDirection.Horizontal ? "100%" : Style.WRAP)
+                .setHeight(scrollingDirection != ScrollingDirection.Vertical ? "100%" : Style.WRAP)
+                .setFlexDirection(Style.VERTICAL);
         addChild(contentWidget);
 
-        addStyle(Style.WIDTH, "100%");
-        addStyle(Style.HEIGHT, "100%");
-        addStyle(Style.FLEX_DIRECTION, Style.VERTICAL);
-        addStyle(Style.PADDING_LEFT, "5");
-        addStyle(Style.PADDING_RIGHT, "5");
-        addStyle(Style.PADDING_TOP, "5");
-        addStyle(Style.PADDING_BOTTOM, "5");
+        getStyle()
+                .setWidth("100%").setHeight("100%")
+                .setFlexDirection(Style.VERTICAL)
+                .setPaddingLeft("5px").setPaddingRight("5px").setPaddingTop("5px").setPaddingBottom("5px");
 
-        eventHandler.registerMouseClickedEvent(this::onMouseClicked);
-        eventHandler.registerMouseReleasedEvent(this::onMouseReleased);
-        eventHandler.registerMouseScrolledEvent(this::onMouseScrolled);
-        eventHandler.registerMouseDraggedEvent(this::onMouseDragged);
+        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
+        eventHandler.registerMouseReleasedUnconsumedEvent(this::onMouseReleasedUnconsumed);
+        eventHandler.registerMouseScrolledUnconsumedEvent(this::onMouseScrolledUnconsumed);
+        eventHandler.registerMouseDraggedUnconsumedEvent(this::onMouseDraggedUnconsumed);
         eventHandler.registerMouseClickedConsumedEvent(this::onMouseClickedConsumed);
     }
 
@@ -232,7 +230,7 @@ public class ScrollingViewWidget extends FlexWidget {
                 .forEach(FlexWidget::show);
         this.yOffset = 0;
         this.xOffset = 0;
-        contentWidget.setDirty();
+        contentWidget.getStyle().setDirty();
     }
 
 
@@ -282,7 +280,7 @@ public class ScrollingViewWidget extends FlexWidget {
         return super.handleMouseDraggedEvent(newData, consumed);
     }
 
-    protected boolean onMouseClicked(IMouseClickedEvent.Data event){
+    protected boolean onMouseClickedUnconsumed(IMouseClickedEvent.Data event){
         if (!rect().contains(event.mouseX(), event.mouseY())) return false;
 
         dragging = true;
@@ -292,7 +290,7 @@ public class ScrollingViewWidget extends FlexWidget {
         dragStartYOffset = yOffset;
         return true;
     }
-    protected boolean onMouseReleased(IMouseReleasedEvent.Data event) {
+    protected boolean onMouseReleasedUnconsumed(IMouseReleasedEvent.Data event) {
         dragging = false;
         dragStartY = 0;
         dragStartX = 0;
@@ -300,7 +298,7 @@ public class ScrollingViewWidget extends FlexWidget {
         dragStartXOffset = 0;
         return false;
     }
-    protected boolean onMouseScrolled(IMouseScrolledEvent.Data event) {
+    protected boolean onMouseScrolledUnconsumed(IMouseScrolledEvent.Data event) {
         if (!rect().contains(event.mouseX(), event.mouseY())) return false;
 
         if (event.scrollX() != 0) xOffset += event.scrollX() > 0 ? -scrollXSensibility : scrollXSensibility;
@@ -309,7 +307,7 @@ public class ScrollingViewWidget extends FlexWidget {
 
         return true;
     }
-    protected boolean onMouseDragged(IMouseDraggedEvent.Data event){
+    protected boolean onMouseDraggedUnconsumed(IMouseDraggedEvent.Data event){
         if (dragging && event.button() == 0){
             int dx = (int)event.mouseX() - dragStartX;
             int dy = (int)event.mouseY() - dragStartY;

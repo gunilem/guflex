@@ -4,7 +4,7 @@ import guni.guflex.api.style.IStyleSpec;
 
 public class IntegerStyle implements IStyleSpec {
     @Override
-    public Object getValue() {
+    public Integer getValue() {
         return value;
     }
 

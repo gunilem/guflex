@@ -10,23 +10,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlexWidgetEventHandler {
-    protected List<IMouseClickedEvent> mouseClickedEventRegister = new ArrayList<>();
-    protected List<IMouseReleasedEvent> mouseReleasedEventRegister = new ArrayList<>();
-    protected List<IMouseScrolledEvent> mouseScrolledEventRegister = new ArrayList<>();
-    protected List<IMouseDraggedEvent> mouseDraggedEventRegister = new ArrayList<>();
-    protected List<IKeyPressedEvent> keyPressedEventRegister = new ArrayList<>();
-    protected List<IKeyReleasedEvent> keyReleasedEventRegister = new ArrayList<>();
-    protected List<ICharTypedEvent> charTypedEventRegister = new ArrayList<>();
+    protected List<IMouseClickedConsumedEvent> mouseClickedEventRegister = new ArrayList<>();
+    protected List<IMouseReleasedConsumedEvent> mouseReleasedEventRegister = new ArrayList<>();
+    protected List<IMouseScrolledConsumedEvent> mouseScrolledEventRegister = new ArrayList<>();
+    protected List<IMouseDraggedConsumedEvent> mouseDraggedEventRegister = new ArrayList<>();
+    protected List<IMouseMovedConsumedEvent> mouseMovedEventRegister = new ArrayList<>();
+    protected List<IKeyPressedConsumedEvent> keyPressedEventRegister = new ArrayList<>();
+    protected List<IKeyReleasedConsumedEvent> keyReleasedEventRegister = new ArrayList<>();
+    protected List<ICharTypedConsumedEvent> charTypedEventRegister = new ArrayList<>();
+    
+    protected List<IMouseClickedEvent> mouseClickedUnconsumedEventRegister = new ArrayList<>();
+    protected List<IMouseReleasedEvent> mouseReleasedUnconsumedEventRegister = new ArrayList<>();
+    protected List<IMouseScrolledEvent> mouseScrolledUnconsumedEventRegister = new ArrayList<>();
+    protected List<IMouseDraggedEvent> mouseDraggedUnconsumedEventRegister = new ArrayList<>();
+    protected List<IMouseMovedEvent> mouseMovedUnconsumedEventRegister = new ArrayList<>();
+    protected List<IKeyPressedEvent> keyPressedUnconsumedEventRegister = new ArrayList<>();
+    protected List<IKeyReleasedEvent> keyReleasedUnconsumedEventRegister = new ArrayList<>();
+    protected List<ICharTypedEvent> charTypedUnconsumedEventRegister = new ArrayList<>();
 
     protected List<IMouseClickedConsumedEvent> mouseClickedConsumedEventRegister = new ArrayList<>();
     protected List<IMouseReleasedConsumedEvent> mouseReleasedConsumedEventRegister = new ArrayList<>();
     protected List<IMouseScrolledConsumedEvent> mouseScrolledConsumedEventRegister = new ArrayList<>();
     protected List<IMouseDraggedConsumedEvent> mouseDraggedConsumedEventRegister = new ArrayList<>();
+    protected List<IMouseMovedConsumedEvent> mouseMovedConsumedEventRegister = new ArrayList<>();
     protected List<IKeyPressedConsumedEvent> keyPressedConsumedEventRegister = new ArrayList<>();
     protected List<IKeyReleasedConsumedEvent> keyReleasedConsumedEventRegister = new ArrayList<>();
     protected List<ICharTypedConsumedEvent> charTypedConsumedEventRegister = new ArrayList<>();
 
-    protected List<IMouseMovedEvent> mouseMovedEventRegister = new ArrayList<>();
 
     protected List<IRenderEvent> renderEventRegister = new ArrayList<>();
     protected List<IRenderBackgroundEvent> renderBackgroundEventRegister = new ArrayList<>();
@@ -45,22 +55,44 @@ public class FlexWidgetEventHandler {
     protected List<IWidgetUpdatedEvent> widgetUpdatedEventRegister = new ArrayList<>();
 
     //register Mouse Event
-    public void registerMouseClickedEvent(IMouseClickedEvent event) { mouseClickedEventRegister.add(event); }
-    public void registerMouseReleasedEvent(IMouseReleasedEvent event) { mouseReleasedEventRegister.add(event); }
-    public void registerMouseScrolledEvent(IMouseScrolledEvent event) { mouseScrolledEventRegister.add(event); }
-    public void registerMouseDraggedEvent(IMouseDraggedEvent event) { mouseDraggedEventRegister.add(event); }
-    public void registerKeyPressedEvent(IKeyPressedEvent event) { keyPressedEventRegister.add(event); }
-    public void registerKeyReleasedEvent(IKeyReleasedEvent event) { keyReleasedEventRegister.add(event); }
-    public void registerCharTypedEvent(ICharTypedEvent event) { charTypedEventRegister.add(event); }
+    public void registerMouseClickedEvent(IMouseClickedConsumedEvent event) { mouseClickedEventRegister.add(event); }
+    public void registerMouseReleasedEvent(IMouseReleasedConsumedEvent event) { mouseReleasedEventRegister.add(event); }
+    public void registerMouseScrolledEvent(IMouseScrolledConsumedEvent event) { mouseScrolledEventRegister.add(event); }
+    public void registerMouseDraggedEvent(IMouseDraggedConsumedEvent event) { mouseDraggedEventRegister.add(event); }
+    public void registerMouseMovedEvent(IMouseMovedConsumedEvent event) { mouseMovedEventRegister.add(event); }
+    public void registerKeyPressedEvent(IKeyPressedConsumedEvent event) { keyPressedEventRegister.add(event); }
+    public void registerKeyReleasedEvent(IKeyReleasedConsumedEvent event) { keyReleasedEventRegister.add(event); }
+    public void registerCharTypedEvent(ICharTypedConsumedEvent event) { charTypedEventRegister.add(event); }
 
     //unregister Mouse Event
-    public void unregisterMouseClickedEvent(IMouseClickedEvent event) { mouseClickedEventRegister.remove(event); }
-    public void unregisterMouseReleasedEvent(IMouseReleasedEvent event) { mouseReleasedEventRegister.remove(event); }
-    public void unregisterMouseScrolledEvent(IMouseScrolledEvent event) { mouseScrolledEventRegister.remove(event); }
-    public void unregisterMouseDraggedEvent(IMouseDraggedEvent event) { mouseDraggedEventRegister.remove(event); }
-    public void unregisterKeyPressedEvent(IKeyPressedEvent event) { keyPressedEventRegister.remove(event); }
-    public void unregisterKeyReleasedEvent(IKeyReleasedEvent event) { keyReleasedEventRegister.remove(event); }
-    public void unregisterCharTypedEvent(ICharTypedEvent event) { charTypedEventRegister.remove(event); }
+    public void unregisterMouseClickedEvent(IMouseClickedConsumedEvent event) { mouseClickedEventRegister.add(event); }
+    public void unregisterMouseReleasedEvent(IMouseReleasedConsumedEvent event) { mouseReleasedEventRegister.add(event); }
+    public void unregisterMouseScrolledEvent(IMouseScrolledConsumedEvent event) { mouseScrolledEventRegister.add(event); }
+    public void unregisterMouseDraggedEvent(IMouseDraggedConsumedEvent event) { mouseDraggedEventRegister.add(event); }
+    public void unregisterMouseMovedEvent(IMouseMovedConsumedEvent event) { mouseMovedEventRegister.add(event); }
+    public void unregisterKeyPressedEvent(IKeyPressedConsumedEvent event) { keyPressedEventRegister.add(event); }
+    public void unregisterKeyReleasedEvent(IKeyReleasedConsumedEvent event) { keyReleasedEventRegister.add(event); }
+    public void unregisterCharTypedEvent(ICharTypedConsumedEvent event) { charTypedEventRegister.add(event); }
+
+    //register Mouse Unconsumed Event
+    public void registerMouseClickedUnconsumedEvent(IMouseClickedEvent event) { mouseClickedUnconsumedEventRegister.add(event); }
+    public void registerMouseReleasedUnconsumedEvent(IMouseReleasedEvent event) { mouseReleasedUnconsumedEventRegister.add(event); }
+    public void registerMouseScrolledUnconsumedEvent(IMouseScrolledEvent event) { mouseScrolledUnconsumedEventRegister.add(event); }
+    public void registerMouseDraggedUnconsumedEvent(IMouseDraggedEvent event) { mouseDraggedUnconsumedEventRegister.add(event); }
+    public void registerMouseMovedUnconsumedEvent(IMouseMovedEvent event) { mouseMovedUnconsumedEventRegister.add(event); }
+    public void registerKeyPressedUnconsumedEvent(IKeyPressedEvent event) { keyPressedUnconsumedEventRegister.add(event); }
+    public void registerKeyReleasedUnconsumedEvent(IKeyReleasedEvent event) { keyReleasedUnconsumedEventRegister.add(event); }
+    public void registerCharTypedUnconsumedEvent(ICharTypedEvent event) { charTypedUnconsumedEventRegister.add(event); }
+
+    //unregister Mouse Event
+    public void unregisterMouseClickedUnconsumedEvent(IMouseClickedEvent event) { mouseClickedUnconsumedEventRegister.remove(event); }
+    public void unregisterMouseReleasedUnconsumedEvent(IMouseReleasedEvent event) { mouseReleasedUnconsumedEventRegister.remove(event); }
+    public void unregisterMouseScrolledUnconsumedEvent(IMouseScrolledEvent event) { mouseScrolledUnconsumedEventRegister.remove(event); }
+    public void unregisterMouseDraggedUnconsumedEvent(IMouseDraggedEvent event) { mouseDraggedUnconsumedEventRegister.remove(event); }
+    public void unregisterMouseMovedUnconsumedEvent(IMouseMovedEvent event) { mouseMovedUnconsumedEventRegister.remove(event); }
+    public void unregisterKeyPressedUnconsumedEvent(IKeyPressedEvent event) { keyPressedUnconsumedEventRegister.remove(event); }
+    public void unregisterKeyReleasedUnconsumedEvent(IKeyReleasedEvent event) { keyReleasedUnconsumedEventRegister.remove(event); }
+    public void unregisterCharTypedUnconsumedEvent(ICharTypedEvent event) { charTypedUnconsumedEventRegister.remove(event); }
 
 
     //register Mouse Consumed Event
@@ -68,6 +100,7 @@ public class FlexWidgetEventHandler {
     public void registerMouseReleasedConsumedEvent(IMouseReleasedConsumedEvent event) { mouseReleasedConsumedEventRegister.add(event); }
     public void registerMouseScrolledConsumedEvent(IMouseScrolledConsumedEvent event) { mouseScrolledConsumedEventRegister.add(event); }
     public void registerMouseDraggedConsumedEvent(IMouseDraggedConsumedEvent event) { mouseDraggedConsumedEventRegister.add(event); }
+    public void registerMouseMovedConsumedEvent(IMouseMovedConsumedEvent event) { mouseMovedConsumedEventRegister.add(event); }
     public void registerKeyPressedConsumedEvent(IKeyPressedConsumedEvent event) { keyPressedConsumedEventRegister.add(event); }
     public void registerKeyReleasedConsumedEvent(IKeyReleasedConsumedEvent event) { keyReleasedConsumedEventRegister.add(event); }
     public void registerCharTypedConsumedEvent(ICharTypedConsumedEvent event) { charTypedConsumedEventRegister.add(event); }
@@ -77,12 +110,10 @@ public class FlexWidgetEventHandler {
     public void unregisterMouseReleasedConsumedEvent(IMouseReleasedConsumedEvent event) { mouseReleasedConsumedEventRegister.remove(event); }
     public void unregisterMouseScrolledConsumedEvent(IMouseScrolledConsumedEvent event) { mouseScrolledConsumedEventRegister.remove(event); }
     public void unregisterMouseDraggedConsumedEvent(IMouseDraggedConsumedEvent event) { mouseDraggedConsumedEventRegister.remove(event); }
+    public void unregisterMouseMovedConsumedEvent(IMouseMovedConsumedEvent event) { mouseMovedConsumedEventRegister.remove(event); }
     public void unregisterKeyPressedConsumedEvent(IKeyPressedConsumedEvent event) { keyPressedConsumedEventRegister.remove(event); }
     public void unregisterKeyReleasedConsumedEvent(IKeyReleasedConsumedEvent event) { keyReleasedConsumedEventRegister.remove(event); }
     public void unregisterCharTypedConsumedEvent(ICharTypedConsumedEvent event) { charTypedConsumedEventRegister.remove(event); }
-
-    public void registerMouseMovedEvent(IMouseMovedEvent event) { mouseMovedEventRegister.add(event); }
-    public void unregisterMouseMovedEvent(IMouseMovedEvent event) { mouseMovedEventRegister.remove(event); }
 
     //register render event
     public void registerRenderEvent(IRenderEvent event) { renderEventRegister.add(event); }
@@ -141,52 +172,102 @@ public class FlexWidgetEventHandler {
             screen.screenEventHandler().unregister(event);
         }
     }
+    
+    
 
-    public boolean invokeMouseClickedEvent(IMouseClickedEvent.Data data){
+    public void invokeMouseClickedEvent(IMouseClickedEvent.Data data){
+        for (IMouseClickedConsumedEvent event : mouseClickedEventRegister){
+            event.onEvent(data);
+        }
+    }
+    public void invokeMouseReleasedEvent(IMouseReleasedEvent.Data data){
+        for (IMouseReleasedConsumedEvent event : mouseReleasedEventRegister){
+            event.onEvent(data);
+        }
+    }
+    public void invokeMouseScrolledEvent(IMouseScrolledEvent.Data data){
+        for (IMouseScrolledConsumedEvent event : mouseScrolledEventRegister){
+            event.onEvent(data);
+        }
+    }
+    public void invokeMouseDraggedEvent(IMouseDraggedEvent.Data data){
+        for (IMouseDraggedConsumedEvent event : mouseDraggedEventRegister){
+            event.onEvent(data);
+        }
+    }
+    public void invokeMouseMovedEvent(IMouseMovedEvent.Data data){
+        for (IMouseMovedConsumedEvent event : mouseMovedEventRegister){
+            event.onEvent(data);
+        }
+    }
+    public void invokeKeyPressedEvent(IKeyPressedEvent.Data data){
+        for (IKeyPressedConsumedEvent event : keyPressedEventRegister){
+            event.onEvent(data);
+        }
+    }
+    public void invokeKeyReleasedEvent(IKeyReleasedEvent.Data data){
+        for (IKeyReleasedConsumedEvent event : keyReleasedEventRegister){
+            event.onEvent(data);
+        }
+    }
+    public void invokeCharTypedEvent(ICharTypedEvent.Data data){
+        for (ICharTypedConsumedEvent event : charTypedEventRegister){
+            event.onEvent(data);
+        }
+    }
+
+    public boolean invokeMouseClickedUnconsumedEvent(IMouseClickedEvent.Data data){
         boolean consumed = false;
-        for (IMouseClickedEvent event : mouseClickedEventRegister){
+        for (IMouseClickedEvent event : mouseClickedUnconsumedEventRegister){
             if (event.onEvent(data)) consumed = true;
         }
         return consumed;
     }
-    public boolean invokeMouseReleasedEvent(IMouseReleasedEvent.Data data){
+    public boolean invokeMouseReleasedUnconsumedEvent(IMouseReleasedEvent.Data data){
         boolean consumed = false;
-        for (IMouseReleasedEvent event : mouseReleasedEventRegister){
+        for (IMouseReleasedEvent event : mouseReleasedUnconsumedEventRegister){
             if (event.onEvent(data)) consumed = true;
         }
         return consumed;
     }
-    public boolean invokeMouseScrolledEvent(IMouseScrolledEvent.Data data){
+    public boolean invokeMouseScrolledUnconsumedEvent(IMouseScrolledEvent.Data data){
         boolean consumed = false;
-        for (IMouseScrolledEvent event : mouseScrolledEventRegister){
+        for (IMouseScrolledEvent event : mouseScrolledUnconsumedEventRegister){
             if (event.onEvent(data)) consumed = true;
         }
         return consumed;
     }
-    public boolean invokeMouseDraggedEvent(IMouseDraggedEvent.Data data){
+    public boolean invokeMouseDraggedUnconsumedEvent(IMouseDraggedEvent.Data data){
         boolean consumed = false;
-        for (IMouseDraggedEvent event : mouseDraggedEventRegister){
+        for (IMouseDraggedEvent event : mouseDraggedUnconsumedEventRegister){
             if (event.onEvent(data)) consumed = true;
         }
         return consumed;
     }
-    public boolean invokeKeyPressedEvent(IKeyPressedEvent.Data data){
+    public boolean invokeMouseMovedUnconsumedEvent(IMouseMovedEvent.Data data){
         boolean consumed = false;
-        for (IKeyPressedEvent event : keyPressedEventRegister){
+        for (IMouseMovedEvent event : mouseMovedUnconsumedEventRegister){
             if (event.onEvent(data)) consumed = true;
         }
         return consumed;
     }
-    public boolean invokeKeyReleasedEvent(IKeyReleasedEvent.Data data){
+    public boolean invokeKeyPressedUnconsumedEvent(IKeyPressedEvent.Data data){
         boolean consumed = false;
-        for (IKeyReleasedEvent event : keyReleasedEventRegister){
+        for (IKeyPressedEvent event : keyPressedUnconsumedEventRegister){
             if (event.onEvent(data)) consumed = true;
         }
         return consumed;
     }
-    public boolean invokeCharTypedEvent(ICharTypedEvent.Data data){
+    public boolean invokeKeyReleasedUnconsumedEvent(IKeyReleasedEvent.Data data){
         boolean consumed = false;
-        for (ICharTypedEvent event : charTypedEventRegister){
+        for (IKeyReleasedEvent event : keyReleasedUnconsumedEventRegister){
+            if (event.onEvent(data)) consumed = true;
+        }
+        return consumed;
+    }
+    public boolean invokeCharTypedUnconsumedEvent(ICharTypedEvent.Data data){
+        boolean consumed = false;
+        for (ICharTypedEvent event : charTypedUnconsumedEventRegister){
             if (event.onEvent(data)) consumed = true;
         }
         return consumed;
@@ -212,6 +293,11 @@ public class FlexWidgetEventHandler {
             event.onEvent(data);
         }
     }
+    public void invokeMouseMovedConsumedEvent(IMouseMovedEvent.Data data){
+        for (IMouseMovedConsumedEvent event : mouseMovedConsumedEventRegister){
+            event.onEvent(data);
+        }
+    }
     public void invokeKeyPressedConsumedEvent(IKeyPressedEvent.Data data){
         for (IKeyPressedConsumedEvent event : keyPressedConsumedEventRegister){
             event.onEvent(data);
@@ -228,11 +314,6 @@ public class FlexWidgetEventHandler {
         }
     }
 
-    public void invokeMouseMovedEvent(IMouseMovedEvent.Data data){
-        for (IMouseMovedEvent event : mouseMovedEventRegister){
-            event.onEvent(data);
-        }
-    }
 
     public void invokeRenderEvent(IRenderEvent.Data data){
         for (IRenderEvent event : renderEventRegister){
@@ -314,11 +395,30 @@ public class FlexWidgetEventHandler {
     public void release(){
         mouseClickedEventRegister.clear();
         mouseReleasedEventRegister.clear();
-        mouseDraggedEventRegister.clear();
         mouseScrolledEventRegister.clear();
+        mouseDraggedEventRegister.clear();
+        mouseMovedEventRegister.clear();
         keyPressedEventRegister.clear();
         keyReleasedEventRegister.clear();
         charTypedEventRegister.clear();
+        
+        mouseClickedUnconsumedEventRegister.clear();
+        mouseReleasedUnconsumedEventRegister.clear();
+        mouseScrolledUnconsumedEventRegister.clear();
+        mouseDraggedUnconsumedEventRegister.clear();
+        mouseMovedUnconsumedEventRegister.clear();
+        keyPressedUnconsumedEventRegister.clear();
+        keyReleasedUnconsumedEventRegister.clear();
+        charTypedUnconsumedEventRegister.clear();
+
+        mouseClickedConsumedEventRegister.clear();
+        mouseReleasedConsumedEventRegister.clear();
+        mouseScrolledConsumedEventRegister.clear();
+        mouseDraggedConsumedEventRegister.clear();
+        mouseMovedConsumedEventRegister.clear();
+        keyPressedConsumedEventRegister.clear();
+        keyReleasedConsumedEventRegister.clear();
+        charTypedConsumedEventRegister.clear();
 
         renderEventRegister.clear();
         renderBackgroundEventRegister.clear();
@@ -326,17 +426,14 @@ public class FlexWidgetEventHandler {
         renderTooltipsEventRegister.clear();
         renderDebugEventRegister.clear();
 
-        widgetHiddenEventRegister.clear();
         widgetShownEventRegister.clear();
-        widgetUpdatedEventRegister.clear();
-
+        widgetHiddenEventRegister.clear();
         widgetAddedEventRegister.clear();
         widgetRemovedEventRegister.clear();
-
         widgetChildAddedEventRegister.clear();
         widgetChildRemovedEventRegister.clear();
-
         widgetMeasuredEventRegister.clear();
         widgetPositionedEventRegister.clear();
+        widgetUpdatedEventRegister.clear();
     }
 }

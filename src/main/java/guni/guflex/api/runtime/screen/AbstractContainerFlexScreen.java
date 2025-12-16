@@ -65,19 +65,12 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
 
         ButtonWidget debugMenu = new ButtonWidget();
         debugMenu.setBackground(Internals.getTextures().button_background);
-        debugMenu.addStyle(Style.ANCHOR, Style.BOTTOM_LEFT);
-        debugMenu.addStyle(Style.PIVOT, Style.BOTTOM_LEFT);
+        debugMenu.getStyle().setAnchor(Style.BOTTOM_LEFT);
+        debugMenu.getStyle().setPivot(Style.BOTTOM_LEFT);
 
-        debugMenu.addStyle(Style.MARGIN_LEFT, "10px");
-        debugMenu.addStyle(Style.MARGIN_BOTTOM, "10px");
-
-        debugMenu.addStyle(Style.PADDING_LEFT, "5px");
-        debugMenu.addStyle(Style.PADDING_RIGHT, "5px");
-        debugMenu.addStyle(Style.PADDING_BOTTOM, "5px");
-        debugMenu.addStyle(Style.PADDING_TOP, "5px");
-
-        debugMenu.addStyle(Style.WIDTH, "15");
-        debugMenu.addStyle(Style.HEIGHT, "15");
+        debugMenu.getStyle().setMarginLeft("10px").setMarginBottom("10px")
+                .setPaddingLeft("5px").setPaddingRight("5px").setPaddingTop("5px").setPaddingBottom("5px")
+                .setWidth("15").setHeight("15");
 
         debugMenu.defineName("marginDebug");
         debugMenu.onclick.register(this::setupDebugPopup);
@@ -89,8 +82,8 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
     @Override
     public void removed() {
         super.removed();
-        root.removeAllChild();
-        popupRoot.removeAllChild();
+        root.handleRemovedEvent();
+        popupRoot.handleRemovedEvent();
     }
 
     public void computeWidgets(){
@@ -101,68 +94,56 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
     private void setupDebugPopup(double mouseX, double mouseY){
         BaseFlexPopup popup = new BaseFlexPopup(false, false, true, false);
         popup.defineName("Debug Popup");
-        popup.addStyle(Style.PIVOT, Style.BOTTOM_LEFT);
-        popup.addStyle(Style.HEIGHT,  Style.WRAP);
-        popup.contentWidget.addStyle(Style.HEIGHT,  Style.WRAP);
-        popup.contentWidget.addStyle(Style.FLEX_DIRECTION,  Style.VERTICAL);
 
-        LabelWidget popupTitle = new LabelWidget(Component.literal("Layout Debugger"), false, false);
-        popupTitle.addStyle(Style.MARGIN_LEFT, "5px");
-        popupTitle.addStyle(Style.MARGIN_RIGHT, "5px");
-        popupTitle.addStyle(Style.MARGIN_BOTTOM, "5px");
-        popupTitle.addStyle(Style.MARGIN_TOP, "5px");
-        popupTitle.addStyle(Style.PIVOT, Style.TOP_CENTER);
+        popup.getStyle().setPivot(Style.BOTTOM_LEFT).setHeight(Style.WRAP);
+
+        popup.contentWidget.getStyle().setHeight(Style.WRAP).setFlexDirection(Style.VERTICAL);
+
+        LabelWidget popupTitle = new LabelWidget(Component.literal("Layout Debugger"), false, false, false);
+
+        popupTitle.getStyle().setMarginLeft("5px").setMarginRight("5px").setMarginTop("5px").setMarginBottom("5px").setPivot(Style.TOP_CENTER);
+
         popup.contentWidget.addChild(popupTitle);
 
         DropdownWidget<IRenderDebugEvent.DebugInfo.DebugTrigger> debugTypeDropdownWidget = new DropdownWidget<>(IRenderDebugEvent.DebugInfo.DebugTrigger.values());
         debugTypeDropdownWidget.setBackground(Internals.getTextures().button_background);
         debugTypeDropdownWidget.defineName("Debug Type Dropdown");
-        debugTypeDropdownWidget.addStyle(Style.WIDTH, "100%");
-        debugTypeDropdownWidget.addStyle(Style.BOX_SIZING_X, Style.BORDER_BOX);
-        debugTypeDropdownWidget.addStyle(Style.BOX_SIZING_Y, Style.CONTENT_BOX);
+        debugTypeDropdownWidget.getStyle().setWidth("100%").setBoxSizingX(Style.BORDER_BOX).setBoxSizingY(Style.CONTENT_BOX);
         debugTypeDropdownWidget.onValueChanged.register(debugInfo::setDebugTrigger);
         popup.contentWidget.addChild(debugTypeDropdownWidget);
 
-        LabelWidget marginToggleLabel = new LabelWidget(Component.literal("Margin"), false, false);
+        LabelWidget marginToggleLabel = new LabelWidget(Component.literal("Margin"), false, false, false);
         ToggleWidget marginToggle = new ToggleWidget(debugInfo.marginDebug);
         marginToggle.setBackground(Internals.getTextures().button_background);
         marginToggle.defineName("Margin Toggle");
-        marginToggle.addStyle(Style.WIDTH, "100%");
-        marginToggle.addStyle(Style.BOX_SIZING_X, Style.BORDER_BOX);
-        marginToggle.addStyle(Style.BOX_SIZING_Y, Style.CONTENT_BOX);
+        marginToggle.getStyle().setWidth("100%").setBoxSizingX(Style.BORDER_BOX).setBoxSizingY(Style.CONTENT_BOX);
         marginToggle.addChild(marginToggleLabel);
         marginToggle.onValueChanged.register(value -> debugInfo.marginDebug = value);
         popup.contentWidget.addChild(marginToggle);
 
-        LabelWidget borderToggleLabel = new LabelWidget(Component.literal("Border"), false, false);
+        LabelWidget borderToggleLabel = new LabelWidget(Component.literal("Border"), false, false, false);
         ToggleWidget borderToggle = new ToggleWidget(debugInfo.borderDebug);
         borderToggle.setBackground(Internals.getTextures().button_background);
         borderToggle.defineName("Margin Toggle");
-        borderToggle.addStyle(Style.WIDTH, "100%");
-        borderToggle.addStyle(Style.BOX_SIZING_X, Style.BORDER_BOX);
-        borderToggle.addStyle(Style.BOX_SIZING_Y, Style.CONTENT_BOX);
+        borderToggle.getStyle().setWidth("100%").setBoxSizingX(Style.BORDER_BOX).setBoxSizingY(Style.CONTENT_BOX);
         borderToggle.addChild(borderToggleLabel);
         borderToggle.onValueChanged.register(value -> debugInfo.borderDebug = value);
         popup.contentWidget.addChild(borderToggle);
 
-        LabelWidget paddingToggleLabel = new LabelWidget(Component.literal("Padding"), false, false);
+        LabelWidget paddingToggleLabel = new LabelWidget(Component.literal("Padding"), false, false, false);
         ToggleWidget paddingToggle = new ToggleWidget(debugInfo.paddingDebug);
         paddingToggle.setBackground(Internals.getTextures().button_background);
         paddingToggle.defineName("Margin Toggle");
-        paddingToggle.addStyle(Style.WIDTH, "100%");
-        paddingToggle.addStyle(Style.BOX_SIZING_X, Style.BORDER_BOX);
-        paddingToggle.addStyle(Style.BOX_SIZING_Y, Style.CONTENT_BOX);
+        paddingToggle.getStyle().setWidth("100%").setBoxSizingX(Style.BORDER_BOX).setBoxSizingY(Style.CONTENT_BOX);
         paddingToggle.addChild(paddingToggleLabel);
         paddingToggle.onValueChanged.register(value -> debugInfo.paddingDebug = value);
         popup.contentWidget.addChild(paddingToggle);
 
-        LabelWidget debugBoxToggleLabel = new LabelWidget(Component.literal("Debug Box"), false, false);
+        LabelWidget debugBoxToggleLabel = new LabelWidget(Component.literal("Debug Box"), false, false, false);
         ToggleWidget debugBoxToggle = new ToggleWidget(debugInfo.displayDebugBox);
         debugBoxToggle.setBackground(Internals.getTextures().button_background);
         debugBoxToggle.defineName("Margin Toggle");
-        debugBoxToggle.addStyle(Style.WIDTH, "100%");
-        debugBoxToggle.addStyle(Style.BOX_SIZING_X, Style.BORDER_BOX);
-        debugBoxToggle.addStyle(Style.BOX_SIZING_Y, Style.CONTENT_BOX);
+        debugBoxToggle.getStyle().setWidth("100%").setBoxSizingX(Style.BORDER_BOX).setBoxSizingY(Style.CONTENT_BOX);
         debugBoxToggle.addChild(debugBoxToggleLabel);
         debugBoxToggle.onValueChanged.register(value -> debugInfo.displayDebugBox = value);
         popup.contentWidget.addChild(debugBoxToggle);
@@ -225,16 +206,11 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
             if (!widget.renderable()) continue;
             if (!(widget instanceof BaseFlexPopup popup)) continue;
             consumed = popup.handleMouseClickedEvent(eventData, consumed);
-            if (consumed){
-                if (!popup.allowOtherInputs()){
-                    if (popup.allowDefaultInputs()){
-                        return super.mouseClicked(mouseX, mouseY, button);
-                    }
-                    return true;
+            if (!popup.allowOtherInputs()){
+                if (popup.allowDefaultInputs()){
+                    return super.mouseClicked(mouseX, mouseY, button);
                 }
-                else {
-                    consumed = false;
-                }
+                return true;
             }
         }
         consumed = root.handleMouseClickedEvent(eventData, consumed);
@@ -251,16 +227,11 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
             if (!widget.renderable()) continue;
             if (!(widget instanceof BaseFlexPopup popup)) continue;
             consumed = popup.handleMouseReleasedEvent(eventData, consumed);
-            if (consumed){
-                if (!popup.allowOtherInputs()){
-                    if (popup.allowDefaultInputs()){
-                        return super.mouseReleased(mouseX, mouseY, button);
-                    }
-                    return true;
+            if (!popup.allowOtherInputs()){
+                if (popup.allowDefaultInputs()){
+                    return super.mouseReleased(mouseX, mouseY, button);
                 }
-                else {
-                    consumed = false;
-                }
+                return true;
             }
         }
         consumed = root.handleMouseReleasedEvent(eventData, consumed);
@@ -277,16 +248,11 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
             if (!widget.renderable()) continue;
             if (!(widget instanceof BaseFlexPopup popup)) continue;
             consumed = popup.handleMouseDraggedEvent(eventData, consumed);
-            if (consumed){
-                if (!popup.allowOtherInputs()){
-                    if (popup.allowDefaultInputs()){
-                        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
-                    }
-                    return true;
+            if (!popup.allowOtherInputs()){
+                if (popup.allowDefaultInputs()){
+                    return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
                 }
-                else {
-                    consumed = false;
-                }
+                return true;
             }
         }
         consumed = root.handleMouseDraggedEvent(eventData, consumed);
@@ -303,16 +269,11 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
             if (!widget.renderable()) continue;
             if (!(widget instanceof BaseFlexPopup popup)) continue;
             consumed = popup.handleMouseScrolledEvent(eventData, consumed);
-            if (consumed){
-                if (!popup.allowOtherInputs()){
-                    if (popup.allowDefaultInputs()){
-                        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
-                    }
-                    return true;
+            if (!popup.allowOtherInputs()){
+                if (popup.allowDefaultInputs()){
+                    return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
                 }
-                else {
-                    consumed = false;
-                }
+                return true;
             }
         }
         consumed = root.handleMouseScrolledEvent(eventData, consumed);
@@ -322,8 +283,20 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
     @Override
     public void mouseMoved(double mouseX, double mouseY) {
         IMouseMovedEvent.Data eventData = new IMouseMovedEvent.Data(mouseX, mouseY);
-        popupRoot.handleMouseMovedEvent(eventData);
-        root.handleMouseMovedEvent(eventData);
+
+        boolean consumed = false;
+        for (int i = popupRoot.children().size() -1; i >= 0; i--){
+            IFlexWidget widget = popupRoot.children().get(i);
+            if (!widget.renderable()) continue;
+            if (!(widget instanceof BaseFlexPopup popup)) continue;
+            consumed = popup.handleMouseMovedEvent(eventData, consumed);
+            if (!popup.allowOtherInputs()){
+                if (popup.allowDefaultInputs()) super.mouseMoved(mouseX, mouseY);
+                return;
+            }
+        }
+        consumed = root.handleMouseMovedEvent(eventData, consumed);
+        if (!consumed) super.mouseMoved(mouseX, mouseY);
     }
 
     @Override
@@ -362,16 +335,11 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
             if (!widget.renderable()) continue;
             if (!(widget instanceof BaseFlexPopup popup)) continue;
             consumed = popup.handleKeyReleasedEvent(eventData, consumed);
-            if (consumed){
-                if (!popup.allowOtherInputs()){
-                    if (popup.allowDefaultInputs()){
-                        return super.keyReleased(keyCode, scanCode, modifiers);
-                    }
-                    return true;
+            if (!popup.allowOtherInputs()){
+                if (popup.allowDefaultInputs()){
+                    return super.keyReleased(keyCode, scanCode, modifiers);
                 }
-                else {
-                    consumed = false;
-                }
+                return true;
             }
         }
         consumed = root.handleKeyReleasedEvent(eventData, consumed);
@@ -388,16 +356,11 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
             if (!widget.renderable()) continue;
             if (!(widget instanceof BaseFlexPopup popup)) continue;
             consumed = popup.handleCharTypedEvent(eventData, consumed);
-            if (consumed){
-                if (!popup.allowOtherInputs()){
-                    if (popup.allowDefaultInputs()){
-                        return super.charTyped(codePoint, modifiers);
-                    }
-                    return true;
+            if (!popup.allowOtherInputs()){
+                if (popup.allowDefaultInputs()){
+                    return super.charTyped(codePoint, modifiers);
                 }
-                else {
-                    consumed = false;
-                }
+                return true;
             }
         }
         consumed = root.handleCharTypedEvent(eventData, consumed);

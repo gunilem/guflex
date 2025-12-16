@@ -12,10 +12,9 @@ public class ButtonWidget extends FlexWidget {
         super();
         this.onclick = new EventRegister<>();
 
-        addStyle(Style.WIDTH, Style.WRAP);
-        addStyle(Style.HEIGHT, Style.WRAP);
+        getStyle().setWidth(Style.WRAP).setHeight(Style.WRAP);
 
-        eventHandler.registerMouseClickedEvent(this::onMouseClicked);
+        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
 
         eventHandler.registerWidgetRemovedEvent(this::onRemoved);
     }
@@ -24,7 +23,7 @@ public class ButtonWidget extends FlexWidget {
         onclick.release();
     }
 
-    protected boolean onMouseClicked(IMouseClickedEvent.Data data){
+    protected boolean onMouseClickedUnconsumed(IMouseClickedEvent.Data data){
         if (!rect().contains(data.mouseX(), data.mouseY())) return false;
 
         onclick.invoke(data.mouseX(), data.mouseY());

@@ -1,54 +1,41 @@
 package guni.guflex.common.style;
 
-import guni.guflex.api.style.IStyleSpec;
+import guni.guflex.GuFlex;
 
-public class LengthPercentEnumStyle implements IStyleSpec {
-    @Override
-    public Object getValue() {
-        return data;
-    }
+public class LengthPercentEnumStyle {
 
     public enum Type{
         Pixel,
         Percent,
         Keyword
     }
-    public record Data(
-            Type type,
-            float floatValue,
-            String stringValue
-    )
-    {
-        public int resolve(int parentAxisLength){
-            switch (type) {
-                case Type.Pixel -> {
-                    return (int)floatValue;
-                }
-                case Type.Percent -> {
-                    return Math.max((int)(parentAxisLength * floatValue), 0);
-                }
-                case Type.Keyword -> {
-                    return 0;
-                }
+
+
+    protected Type type;
+    public Type getType(){
+        return type;
+    }
+    protected Object value;
+
+    public int resolve(int parentAxisLength){
+        switch (type) {
+            case Type.Pixel -> {
+                return (int)value;
             }
-            return 0;
+            case Type.Percent -> {
+                return (int)Math.max(parentAxisLength * (float)value, 0);
+            }
         }
-
-        public boolean isString(String value){
-            if (type != Type.Keyword) return false;
-            return stringValue.equals(value);
-        }
+        GuFlex.LOGGER.error("Trying to resolve the size of an Enum Style");
+        return -1;
     }
 
-    protected Data data;
-
-    public LengthPercentEnumStyle(float value, Type type){
-        this.data = new Data(type, value, "");
+    public boolean isKeyword(String keyword){
+        return value.equals(keyword);
     }
 
-    public LengthPercentEnumStyle(String value, Type type){
-        this.data = new Data(type, 0, value);
+    public LengthPercentEnumStyle(Type type, Object value){
+        this.type = type;
+        this.value = value;
     }
-
-
 }

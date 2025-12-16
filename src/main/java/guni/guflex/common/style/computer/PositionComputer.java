@@ -1,40 +1,34 @@
 package guni.guflex.common.style.computer;
 
-import guni.guflex.api.event.widgetEvents.IWidgetPositionedEvent;
-import guni.guflex.api.event.widgetEvents.IWidgetUpdatedEvent;
 import guni.guflex.api.runtime.widget.IFlexWidget;
 import guni.guflex.api.style.FlexRect;
 import guni.guflex.api.style.IStyleComputer;
 import guni.guflex.api.style.IStyleSpec;
 import guni.guflex.api.style.Style;
-import guni.guflex.common.style.EnumStyle;
 import guni.guflex.common.style.LengthPercentStyle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 
-import java.awt.*;
 import java.util.List;
-import java.util.stream.Stream;
 
-public class PositionComputer  implements IStyleComputer {
-    @Override
-    public void compute(FlexRect parentContentRect, IFlexWidget widget) {
+public class PositionComputer {
+    private PositionComputer() {
+        throw new AssertionError("Cannot instantiate PositionComputer");
+    }
+
+    public static void position(FlexRect parentContentRect, IFlexWidget widget) {
         computeLayoutGroup(widget);
     }
 
 
-    public void computeAnchor(FlexRect parentContentRect, IFlexWidget widget) {
-        String anchorData = (String) widget.style(Style.ANCHOR).getValue();
-
+    public static void computeAnchor(FlexRect parentContentRect, IFlexWidget widget) {
         if(parentContentRect == null) return;
 
-        String positionStyle = (String)widget.style(Style.POSITION).getValue();
-        int x = (Integer) widget.style(Style.X).getValue();
-        int y = (Integer) widget.style(Style.Y).getValue();
+        int x = widget.getStyle().getX();
+        int y = widget.getStyle().getY();
 
-        switch (anchorData){
+        switch (widget.getStyle().getAnchor()){
             case(Style.TOP_LEFT) -> {
-                if (positionStyle.equals(Style.FIXED)){
+                if (widget.getStyle().getPosition().equals(Style.FIXED)){
                     widget.rect().setX(x);
                     widget.rect().setY(y);
                     break;
@@ -43,7 +37,7 @@ public class PositionComputer  implements IStyleComputer {
                 widget.rect().setY(parentContentRect.getY() + y);
             }
             case(Style.TOP_RIGHT) -> {
-                if (positionStyle.equals(Style.FIXED)){
+                if (widget.getStyle().getPosition().equals(Style.FIXED)){
                     widget.rect().setX(Minecraft.getInstance().screen.width + x);
                     widget.rect().setY(y);
                     break;
@@ -52,7 +46,7 @@ public class PositionComputer  implements IStyleComputer {
                 widget.rect().setY(parentContentRect.getY() + y);
             }
             case(Style.BOTTOM_LEFT)  -> {
-                if (positionStyle.equals(Style.FIXED)){
+                if (widget.getStyle().getPosition().equals(Style.FIXED)){
                     widget.rect().setX(x);
                     widget.rect().setY(Minecraft.getInstance().screen.height + y);
                     break;
@@ -61,7 +55,7 @@ public class PositionComputer  implements IStyleComputer {
                 widget.rect().setY(parentContentRect.getY() + y + parentContentRect.getHeight());
             }
             case(Style.BOTTOM_RIGHT) -> {
-                if (positionStyle.equals(Style.FIXED)){
+                if (widget.getStyle().getPosition().equals(Style.FIXED)){
                     widget.rect().setX(Minecraft.getInstance().screen.width + x);
                     widget.rect().setY(Minecraft.getInstance().screen.height + y);
                     break;
@@ -70,7 +64,7 @@ public class PositionComputer  implements IStyleComputer {
                 widget.rect().setY(parentContentRect.getY() + y + parentContentRect.getHeight());
             }
             case(Style.LEFT_CENTER)  -> {
-                if (positionStyle.equals(Style.FIXED)){
+                if (widget.getStyle().getPosition().equals(Style.FIXED)){
                     widget.rect().setX(x);
                     widget.rect().setY(Minecraft.getInstance().screen.height / 2 + y);
                     break;
@@ -79,7 +73,7 @@ public class PositionComputer  implements IStyleComputer {
                 widget.rect().setY(parentContentRect.getY() + y + parentContentRect.getHeight() / 2);
             }
             case(Style.RIGHT_CENTER) -> {
-                if (positionStyle.equals(Style.FIXED)){
+                if (widget.getStyle().getPosition().equals(Style.FIXED)){
                     widget.rect().setX(Minecraft.getInstance().screen.width + x);
                     widget.rect().setY(Minecraft.getInstance().screen.height / 2 + y);
                     break;
@@ -88,7 +82,7 @@ public class PositionComputer  implements IStyleComputer {
                 widget.rect().setY(parentContentRect.getY() + y + parentContentRect.getHeight() / 2);
             }
             case(Style.TOP_CENTER)  -> {
-                if (positionStyle.equals(Style.FIXED)){
+                if (widget.getStyle().getPosition().equals(Style.FIXED)){
                     widget.rect().setX(Minecraft.getInstance().screen.width / 2 + x);
                     widget.rect().setY(y);
                     break;
@@ -97,7 +91,7 @@ public class PositionComputer  implements IStyleComputer {
                 widget.rect().setY(parentContentRect.getY() + y);
             }
             case(Style.BOTTOM_CENTER) -> {
-                if (positionStyle.equals(Style.FIXED)){
+                if (widget.getStyle().getPosition().equals(Style.FIXED)){
                     widget.rect().setX(Minecraft.getInstance().screen.width / 2 + x);
                     widget.rect().setY(Minecraft.getInstance().screen.height + y);
                     break;
@@ -106,7 +100,7 @@ public class PositionComputer  implements IStyleComputer {
                 widget.rect().setY(parentContentRect.getY() + y + parentContentRect.getHeight());
             }
             case(Style.CENTER) -> {
-                if (positionStyle.equals(Style.FIXED)){
+                if (widget.getStyle().getPosition().equals(Style.FIXED)){
                     widget.rect().setX(Minecraft.getInstance().screen.width / 2 + x);
                     widget.rect().setY(Minecraft.getInstance().screen.height / 2 + y);
                     break;
@@ -116,19 +110,17 @@ public class PositionComputer  implements IStyleComputer {
             }
         }
     }
-    public void computePivot(IFlexWidget widget) {
-        String pivotData = (String) widget.style(Style.PIVOT).getValue();
 
-        widget.rect().setPivot(pivotData);
+    public static void computePivot(IFlexWidget widget) {
+        widget.rect().setPivot(widget.getStyle().getPivot());
     }
-    public void computeLayoutGroup(IFlexWidget widget) {
-        String flexDirection = (String) widget.style(Style.FLEX_DIRECTION).getValue();
-        IStyleSpec flexLayout = widget.style(Style.FLEX_LAYOUT);
+
+    public static void computeLayoutGroup(IFlexWidget widget) {
         FlexRect contentRect = widget.rect().getContentRect();
 
         List<IFlexWidget> children = widget.children().stream().filter(IFlexWidget::displayed).sorted(
-                (a, b) ->
-                        ((Integer)b.style(Style.LAYOUT_PRIORITY).getValue()).compareTo((Integer)a.style(Style.LAYOUT_PRIORITY).getValue())
+                (obj1, obj2) ->
+                        Integer.compare(obj2.getStyle().getLayoutPriority(), obj1.getStyle().getLayoutPriority())
         ).toList();
 
         for (var child : children) {
@@ -139,21 +131,14 @@ public class PositionComputer  implements IStyleComputer {
         int positionX = contentRect.getX();
         int positionY = contentRect.getY();
 
-        boolean isGrid = flexLayout != null && flexLayout.getValue() == Style.GRID;
+        int itemSpacingX = widget.getStyle().getItemSpacing().resolve(contentRect.getWidth());
+        int itemSpacingY = widget.getStyle().getItemSpacing().resolve(contentRect.getHeight());
 
-        int itemSpacingX = 0;
-        int itemSpacingY = 0;
-        IStyleSpec itemSpacingXStyle = widget.style(Style.ITEM_SPACING);
-        IStyleSpec itemSpacingYStyle = widget.style(Style.ITEM_SPACING);
-        if (itemSpacingXStyle != null){ itemSpacingX = ((LengthPercentStyle.Data)itemSpacingXStyle.getValue()).resolve(contentRect.getWidth()); }
-        if (itemSpacingYStyle != null){ itemSpacingY = ((LengthPercentStyle.Data)itemSpacingYStyle.getValue()).resolve(contentRect.getHeight()); }
-
-        switch (flexDirection) {
+        switch (widget.getStyle().getFlexDirection()) {
             case Style.VERTICAL -> {
-                if (isGrid) {
+                if (widget.getStyle().getFlexDirection().equals(Style.GRID)) {
                     for (var child : children) {
-                        String positionStyle = (String)child.style(Style.POSITION).getValue();
-                        if (!positionStyle.equals(Style.FLEX)) continue;
+                        if (!child.getStyle().getPosition().equals(Style.FLEX)) continue;
 
                         FlexRect childMargin = child.rect().getMarginRect();
                         if (positionX + childMargin.getWidth() + itemSpacingX <= contentRect.getX() + contentRect.getWidth()) {
@@ -170,8 +155,7 @@ public class PositionComputer  implements IStyleComputer {
                     }
                 } else {
                     for (var child : children) {
-                        String positionStyle = (String)child.style(Style.POSITION).getValue();
-                        if (!positionStyle.equals(Style.FLEX)) continue;
+                        if (!child.getStyle().getPosition().equals(Style.FLEX)) continue;
 
                         child.rect().setY(positionY);
                         positionY += child.rect().getMarginRect().getHeight() + itemSpacingY;
@@ -179,10 +163,9 @@ public class PositionComputer  implements IStyleComputer {
                 }
             }
             case Style.HORIZONTAL -> {
-                if (isGrid) {
+                if (widget.getStyle().getFlexDirection().equals(Style.GRID)) {
                     for (var child : children) {
-                        String positionStyle = (String)child.style(Style.POSITION).getValue();
-                        if (!positionStyle.equals(Style.FLEX)) continue;
+                        if (!child.getStyle().getPosition().equals(Style.FLEX)) continue;
 
                         FlexRect childMargin = child.rect().getMarginRect();
                         if (positionY + childMargin.getHeight() + itemSpacingY <= contentRect.getY() + contentRect.getHeight()) {
@@ -200,8 +183,7 @@ public class PositionComputer  implements IStyleComputer {
                 }
                 else {
                     for (var child : children) {
-                        String positionStyle = (String)child.style(Style.POSITION).getValue();
-                        if (!positionStyle.equals(Style.FLEX)) continue;
+                        if (!child.getStyle().getPosition().equals(Style.FLEX)) continue;
 
                         child.rect().setX(positionX);
                         positionX += child.rect().getMarginRect().getWidth() + itemSpacingX;
@@ -216,22 +198,11 @@ public class PositionComputer  implements IStyleComputer {
             child.handlePositionedEvent();
         }
     }
-    public void computeRelativePosition(FlexRect parentContentRect, IFlexWidget widget) {
-        IStyleSpec leftStyle = widget.style(Style.LEFT);
-        IStyleSpec rightStyle = widget.style(Style.RIGHT);
-        IStyleSpec topStyle = widget.style(Style.TOP);
-        IStyleSpec bottomStyle = widget.style(Style.BOTTOM);
-        if (leftStyle != null) {
-            widget.rect().addToX(((LengthPercentStyle.Data)leftStyle.getValue()).resolve(parentContentRect.getWidth()));
-        }
-        if (rightStyle != null) {
-            widget.rect().addToX(-((LengthPercentStyle.Data)rightStyle.getValue()).resolve(parentContentRect.getWidth()));
-        }
-        if (topStyle != null) {
-            widget.rect().addToY(((LengthPercentStyle.Data)topStyle.getValue()).resolve(parentContentRect.getWidth()));
-        }
-        if (bottomStyle != null) {
-            widget.rect().addToY(-((LengthPercentStyle.Data)bottomStyle.getValue()).resolve(parentContentRect.getWidth()));
-        }
+
+    public static void computeRelativePosition(FlexRect parentContentRect, IFlexWidget widget) {
+        widget.rect().addToX(widget.getStyle().getLeft().resolve(parentContentRect.getWidth()));
+        widget.rect().addToX(-widget.getStyle().getRight().resolve(parentContentRect.getWidth()));
+        widget.rect().addToY(widget.getStyle().getTop().resolve(parentContentRect.getWidth()));
+        widget.rect().addToY(-widget.getStyle().getBottom().resolve(parentContentRect.getWidth()));
     }
 }

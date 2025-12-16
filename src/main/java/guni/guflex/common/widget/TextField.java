@@ -77,24 +77,21 @@ public class TextField extends FlexWidget {
 
         setValue(defaultValue);
 
-        addStyle(Style.WIDTH, "100%");
-        addStyle(Style.HEIGHT, "20");
-        addStyle(Style.PADDING_LEFT, "5");
-        addStyle(Style.PADDING_RIGHT, "5");
-        addStyle(Style.PADDING_TOP, "5");
-        addStyle(Style.PADDING_BOTTOM, "5");
-        addStyle(Style.BOX_SIZING_X, Style.BORDER_BOX);
-        addStyle(Style.BOX_SIZING_Y, Style.BORDER_BOX);
+        getStyle()
+                .setWidth("100%").setHeight("20")
+                .setPaddingLeft("5px").setPaddingRight("5px").setPaddingTop("5px").setPaddingBottom("5px")
+                .setBoxSizingX(Style.BORDER_BOX).setBoxSizingY(Style.BORDER_BOX);
+
         setBackground(Internals.getTextures().text_field_background);
 
         eventHandler.registerRenderEvent(this::onRender);
 
-        eventHandler.registerMouseClickedEvent(this::onMouseClicked);
-        eventHandler.registerMouseReleasedEvent(this::onMouseReleased);
-        eventHandler.registerMouseScrolledEvent(this::onMouseScrolled);
-        eventHandler.registerMouseDraggedEvent(this::onMouseDragged);
-        eventHandler.registerKeyPressedEvent(this::onKeyPressed);
-        eventHandler.registerCharTypedEvent(this::onCharTyped);
+        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
+        eventHandler.registerMouseReleasedUnconsumedEvent(this::onMouseReleasedUnconsumed);
+        eventHandler.registerMouseScrolledUnconsumedEvent(this::onMouseScrolledUnconsumed);
+        eventHandler.registerMouseDraggedUnconsumedEvent(this::onMouseDraggedUnconsumed);
+        eventHandler.registerKeyPressedUnconsumedEvent(this::onKeyPressedUnconsumed);
+        eventHandler.registerCharTypedUnconsumedEvent(this::onCharTypedUnconsumed);
 
         eventHandler.registerMouseClickedConsumedEvent(this::onMouseClickedConsumed);
         eventHandler.registerMouseReleasedConsumedEvent(this::onMouseReleasedConsumed);
@@ -389,7 +386,7 @@ public class TextField extends FlexWidget {
         }
     }
 
-    protected boolean onMouseClicked(IMouseClickedEvent.Data event) {
+    protected boolean onMouseClickedUnconsumed(IMouseClickedEvent.Data event) {
         if (!editable) return false;
         if (!rect().contains(event.mouseX(), event.mouseY())) {
             focused = false;
@@ -413,11 +410,11 @@ public class TextField extends FlexWidget {
 
         return true;
     }
-    protected boolean onMouseReleased(IMouseReleasedEvent.Data event) {
+    protected boolean onMouseReleasedUnconsumed(IMouseReleasedEvent.Data event) {
         dragged = false;
         return false;
     }
-    protected boolean onMouseScrolled(IMouseScrolledEvent.Data event) {
+    protected boolean onMouseScrolledUnconsumed(IMouseScrolledEvent.Data event) {
         if (!focused) return false;
         if (!rect().contains(event.mouseX(), event.mouseY())) return false;
 
@@ -427,7 +424,7 @@ public class TextField extends FlexWidget {
 
         return true;
     }
-    protected boolean onMouseDragged(IMouseDraggedEvent.Data event) {
+    protected boolean onMouseDraggedUnconsumed(IMouseDraggedEvent.Data event) {
         if (!editable) return false;
         if (!focused) return false;
         dragged = true;
@@ -436,7 +433,7 @@ public class TextField extends FlexWidget {
 
         return true;
     }
-    protected boolean onKeyPressed(IKeyPressedEvent.Data event) {
+    protected boolean onKeyPressedUnconsumed(IKeyPressedEvent.Data event) {
         if (focused && editable) {
             switch (event.keyCode()) {
                 case 257: //enter
@@ -528,7 +525,7 @@ public class TextField extends FlexWidget {
             return false;
         }
     }
-    protected boolean onCharTyped(ICharTypedEvent.Data event) {
+    protected boolean onCharTypedUnconsumed(ICharTypedEvent.Data event) {
         if (!canConsumeInput()) return false;
         if (!StringUtil.isAllowedChatCharacter(event.codePoint())) return false;
 

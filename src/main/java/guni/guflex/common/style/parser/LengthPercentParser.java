@@ -8,28 +8,10 @@ import guni.guflex.common.style.LengthPercentStyle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LengthPercentParser implements IStyleParser {
-    protected String propertyKey;
-    protected IStyleSpec defaultStyle;
+public class LengthPercentParser {
 
-    public LengthPercentParser(String key, IStyleSpec defaultStyle){
-        this.propertyKey = key;
-        this.defaultStyle = defaultStyle;
-    }
-
-    @Override
-    public String getPropertyKey() {
-        return propertyKey;
-    }
-
-    @Override
-    public IStyleSpec getDefault() {
-        return defaultStyle;
-    }
-
-    @Override
-    public IStyleSpec parse(String data) {
-        IStyleSpec spec;
+    public static LengthPercentStyle parse(String data) {
+        LengthPercentStyle spec;
 
         spec = parsePercent(data);
         if (spec != null) return spec;
@@ -40,7 +22,7 @@ public class LengthPercentParser implements IStyleParser {
         return null;
     }
 
-    protected IStyleSpec parsePercent(String data){
+    protected static LengthPercentStyle parsePercent(String data){
         Pattern pattern = Pattern.compile("(\\d+\\.\\d+|\\d+)%");
         Matcher matcher = pattern.matcher(data);
         if (matcher.find()){
@@ -56,7 +38,7 @@ public class LengthPercentParser implements IStyleParser {
         return null;
     }
 
-    protected IStyleSpec parsePixel(String data){
+    protected static LengthPercentStyle parsePixel(String data){
         String capturedNumbers = data.replace("px", "");
         try {
             int value = Integer.parseInt(capturedNumbers);

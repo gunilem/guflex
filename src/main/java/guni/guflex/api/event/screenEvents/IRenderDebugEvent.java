@@ -14,7 +14,7 @@ public interface IRenderDebugEvent {
             Never
         }
 
-        public DebugTrigger debugTrigger = DebugTrigger.Never;
+        public DebugTrigger debugTrigger = DebugTrigger.Hover;
         public boolean marginDebug;
         public boolean borderDebug;
         public boolean paddingDebug;

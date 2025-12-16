@@ -15,8 +15,7 @@ public class ItemWidget extends FlexWidget {
         super();
         this.item = item;
 
-        addStyle(Style.WIDTH, "16px");
-        addStyle(Style.HEIGHT, "16px");
+        getStyle().setWidth("16px").setHeight("16px");
 
         eventHandler.registerRenderEvent(this::onRender);
     }

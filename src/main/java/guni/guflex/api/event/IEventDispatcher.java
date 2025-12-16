@@ -9,7 +9,7 @@ public interface IEventDispatcher {
     boolean handleMouseReleasedEvent(IMouseReleasedEvent.Data event, boolean consumed);
     boolean handleMouseScrolledEvent(IMouseScrolledEvent.Data event, boolean consumed);
     boolean handleMouseDraggedEvent(IMouseDraggedEvent.Data event, boolean consumed);
-    void handleMouseMovedEvent(IMouseMovedEvent.Data event);
+    boolean handleMouseMovedEvent(IMouseMovedEvent.Data event, boolean consumed);
 
     boolean handleKeyPressedEvent(IKeyPressedEvent.Data event, boolean consumed);
     boolean handleKeyReleasedEvent(IKeyReleasedEvent.Data event, boolean consumed);
