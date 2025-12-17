@@ -270,7 +270,7 @@ public class FlexWidget implements IFlexWidget {
         if (style.isDirty()) { return true; }
         for (IFlexWidget child : children){
             if (child.checkDirty()){
-                if (style.dependsOnChildren) return true;
+                if (style.dependsOnChildren()) return true;
                 else child.recomputeLayout(this);
             }
         }

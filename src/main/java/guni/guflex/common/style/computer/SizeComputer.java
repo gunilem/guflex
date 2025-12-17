@@ -26,7 +26,7 @@ public final class SizeComputer {
         measurePadding(parentContentRect, widget);
 
         LengthPercentEnumStyle widthData = widget.getStyle().getWidth();
-        LengthPercentEnumStyle heightData = widget.getStyle().getWidth();
+        LengthPercentEnumStyle heightData = widget.getStyle().getHeight();
 
         widget.rect().setCropping(
                 widget.getStyle().getLeft().resolve(parentContentRect.getWidth()),
@@ -38,7 +38,7 @@ public final class SizeComputer {
         measureClampSize(parentContentRect, widget);
 
         if (widthData.getType() != LengthPercentEnumStyle.Type.Keyword) {
-            int width = (Integer)widthData.resolve(parentContentRect.getWidth());
+            int width = widthData.resolve(parentContentRect.getWidth());
             switch (widget.getStyle().getBoxSizingX()) {
                 case Style.CONTENT_BOX -> widget.rect().setContentWidth(width);
                 case Style.BORDER_BOX -> widget.rect().setWidth(width);
@@ -46,7 +46,7 @@ public final class SizeComputer {
             }
         }
         if (heightData.getType() != LengthPercentEnumStyle.Type.Keyword) {
-            int height = (Integer)heightData.resolve(parentContentRect.getHeight());
+            int height = heightData.resolve(parentContentRect.getHeight());
             switch (widget.getStyle().getBoxSizingY()) {
                 case Style.CONTENT_BOX -> widget.rect().setContentHeight(height);
                 case Style.BORDER_BOX -> widget.rect().setHeight(height);
@@ -185,14 +185,14 @@ public final class SizeComputer {
             if (!child.displayed()) continue;
             if (!child.getStyle().getPosition().equals(Style.FLEX)) continue;
 
-            if (child.getStyle().getFlexGrow() > 0) {
+            if (child.getStyle().getFlexGrow() <= 0) {
                 computeFlexAuto(child);
                 child.handleMeasuredEvent();
                 continue;
             }
 
-            LengthPercentEnumStyle childWidthData = widget.getStyle().getWidth();
-            LengthPercentEnumStyle childHeightData = widget.getStyle().getWidth();
+            LengthPercentEnumStyle childWidthData = child.getStyle().getWidth();
+            LengthPercentEnumStyle childHeightData = child.getStyle().getHeight();
 
             if (childWidthData.isKeyword(Style.AUTO)) {
                 int widgetWidth = (contentRect.getWidth() - occupiedWidth) * (child.getStyle().getFlexGrow() / totalGrow);

@@ -230,7 +230,6 @@ public class ScrollingViewWidget extends FlexWidget {
                 .forEach(FlexWidget::show);
         this.yOffset = 0;
         this.xOffset = 0;
-        contentWidget.getStyle().setDirty();
     }
 
 

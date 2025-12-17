@@ -187,9 +187,11 @@ public class FlexStyle {
     public void setDirty() {
         if (Minecraft.getInstance().screen instanceof IFlexScreen screen) screen.onHierarchyUpdated();
         isDirty = true;
+
+        dependsOnChildren = WIDTH.isKeyword(Style.WRAP) || HEIGHT.isKeyword(Style.WRAP) || !FLEX_DIRECTION.equals(Style.NONE);
     }
 
-    public boolean dependsOnChildren = true;
+    private boolean dependsOnChildren = true;
     public boolean dependsOnChildren() { return dependsOnChildren; }
 
     public void measure(IFlexWidget parent, IFlexWidget widget){

@@ -31,6 +31,7 @@ public class LengthPercentEnumStyle {
     }
 
     public boolean isKeyword(String keyword){
+        if (type != Type.Keyword) return false;
         return value.equals(keyword);
     }
 
