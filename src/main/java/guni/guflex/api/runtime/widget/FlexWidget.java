@@ -175,6 +175,7 @@ public class FlexWidget implements IFlexWidget {
         if (!rect().contains(event.mouseX(), event.mouseY())) return false;
 
         event.guiGraphics().renderTooltip(Minecraft.getInstance().font, tooltips, Optional.empty(), event.mouseX(), event.mouseY());
+
         return true;
     }
 

@@ -183,7 +183,6 @@ public final class SizeComputer {
 
         for (IFlexWidget child : widget.children()) {
             if (!child.displayed()) continue;
-            if (!child.getStyle().getPosition().equals(Style.FLEX)) continue;
 
             if (child.getStyle().getFlexGrow() <= 0) {
                 computeFlexAuto(child);

@@ -120,13 +120,13 @@ public class FlexRect {
     }
     public void setY(int y){
         if (pivot == null){
-            this.y = y;
+            this.y = y + top;
             return;
         }
         switch (pivot) {
-            case ("top-left"), ("top-right"), ("top-center") -> this.y = y + marginTop;
+            case ("top-left"), ("top-right"), ("top-center") -> this.y = y + marginTop + top;
             case ("left-center"), ("right-center"), ("center") -> this.y = y - height / 2;
-            case ("bottom-left"), ("bottom-right"), ("bottom-center") -> this.y = y - height - marginBottom;
+            case ("bottom-left"), ("bottom-right"), ("bottom-center") -> this.y = y - height - marginBottom - bottom;
             default -> this.y = y;
         }
     }

@@ -102,7 +102,7 @@ public class BaseFlexPopup extends FlexWidget {
             return true;
         }
         event.guiGraphics().pose().translate(0, 0, -zOffset);
-        return false;
+        return rect().contains(event.mouseX(), event.mouseY());
     }
 
     @Override

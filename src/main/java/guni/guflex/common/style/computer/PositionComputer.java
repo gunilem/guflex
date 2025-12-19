@@ -109,6 +109,19 @@ public class PositionComputer {
                 widget.rect().setY(parentContentRect.getY() + y + parentContentRect.getHeight() / 2);
             }
         }
+
+        if (widget.rect().getX() + widget.rect().getWidth() > Minecraft.getInstance().screen.width){
+            widget.rect().setX(Minecraft.getInstance().screen.width - widget.rect().getWidth());
+        }
+        else if (widget.rect().getX() < 0){
+            widget.rect().setX(widget.rect().getWidth());
+        }
+        if (widget.rect().getY() + widget.rect().getHeight() > Minecraft.getInstance().screen.height){
+            widget.rect().setY(Minecraft.getInstance().screen.height - widget.rect().getHeight());
+        }
+        else if (widget.rect().getY() < 0){
+            widget.rect().setY(widget.rect().getHeight());
+        }
     }
 
     public static void computePivot(IFlexWidget widget) {
@@ -136,7 +149,7 @@ public class PositionComputer {
 
         switch (widget.getStyle().getFlexDirection()) {
             case Style.VERTICAL -> {
-                if (widget.getStyle().getFlexDirection().equals(Style.GRID)) {
+                if (widget.getStyle().getFlexLayout().equals(Style.GRID)) {
                     for (var child : children) {
                         if (!child.getStyle().getPosition().equals(Style.FLEX)) continue;
 
@@ -163,7 +176,7 @@ public class PositionComputer {
                 }
             }
             case Style.HORIZONTAL -> {
-                if (widget.getStyle().getFlexDirection().equals(Style.GRID)) {
+                if (widget.getStyle().getFlexLayout().equals(Style.GRID)) {
                     for (var child : children) {
                         if (!child.getStyle().getPosition().equals(Style.FLEX)) continue;
 
@@ -192,17 +205,9 @@ public class PositionComputer {
             }
         }
         for (var child : children) {
-            computeRelativePosition(contentRect, child);
             computeLayoutGroup(child);
             child.handleUpdatedEvent();
             child.handlePositionedEvent();
         }
-    }
-
-    public static void computeRelativePosition(FlexRect parentContentRect, IFlexWidget widget) {
-        widget.rect().addToX(widget.getStyle().getLeft().resolve(parentContentRect.getWidth()));
-        widget.rect().addToX(-widget.getStyle().getRight().resolve(parentContentRect.getWidth()));
-        widget.rect().addToY(widget.getStyle().getTop().resolve(parentContentRect.getWidth()));
-        widget.rect().addToY(-widget.getStyle().getBottom().resolve(parentContentRect.getWidth()));
     }
 }

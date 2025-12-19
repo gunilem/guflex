@@ -79,9 +79,6 @@ public class LabelWidget extends FlexWidget {
     protected boolean waiting = false;
 
     protected void drawScrollingText(IRenderEvent.Data event){
-
-        event.guiGraphics().pose().pushPose();
-
         event.guiGraphics().enableScissor(
                 rect().getX(),
                 rect().getY(),
@@ -127,6 +124,5 @@ public class LabelWidget extends FlexWidget {
         event.guiGraphics().pose().translate(-xOffset, 0, 0);
 
         event.guiGraphics().disableScissor();
-        event.guiGraphics().pose().popPose();
     }
 }

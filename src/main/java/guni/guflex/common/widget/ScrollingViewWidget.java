@@ -150,8 +150,8 @@ public class ScrollingViewWidget extends FlexWidget {
         IRenderTooltipsEvent.Data newData = new IRenderTooltipsEvent.Data(
                 event.guiGraphics(),
                 event.partialTick(),
-                event.mouseX(),
-                event.mouseY(),
+                event.mouseX() + this.xOffset,
+                event.mouseY() + this.yOffset,
                 event.parentXOffset() - this.xOffset,
                 event.parentYOffset() - this.yOffset
         );

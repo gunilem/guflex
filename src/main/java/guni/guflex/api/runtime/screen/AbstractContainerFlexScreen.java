@@ -43,6 +43,9 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
         root.setSize(width, height);
         popupRoot.setSize(width, height);
 
+        root.getStyle().setDirty();
+        popupRoot.getStyle().setDirty();
+
         computeWidgets();
 
         eventHandler.invoke(new IScreenInitEvent.Data(this));
@@ -396,11 +399,21 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
     @Override
     protected void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         IRenderTooltipsEvent.Data tooltipsData = new IRenderTooltipsEvent.Data(guiGraphics, 0, mouseX, mouseY, 0, 0);
-        if (!popupRoot.handleRenderTooltipsEvent(tooltipsData)){
-            if (!root.handleRenderTooltipsEvent(tooltipsData)){
-                super.renderTooltip(guiGraphics, mouseX, mouseY);
+
+        for (int i = popupRoot.children().size() -1; i >= 0; i--){
+            IFlexWidget widget = popupRoot.children().get(i);
+            if (!widget.renderable()) continue;
+            if (!(widget instanceof BaseFlexPopup popup)) continue;
+            if (popup.handleRenderTooltipsEvent(tooltipsData)) return;
+            if (!popup.allowOtherInputs()){
+                if (popup.allowDefaultInputs()){
+                    super.renderTooltip(guiGraphics, mouseX, mouseY);
+                    return;
+                }
+                return;
             }
         }
+        if (!root.handleRenderTooltipsEvent(tooltipsData)) super.renderTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
