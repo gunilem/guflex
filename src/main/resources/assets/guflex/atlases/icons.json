@@ -2,7 +2,7 @@
   "sources": [
     {
       "type": "directory",
-      "source": "gui/icons",
+      "source": "gui",
       "prefix": ""
     }
   ]

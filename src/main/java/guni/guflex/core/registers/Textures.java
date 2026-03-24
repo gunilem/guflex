@@ -20,15 +20,15 @@ public class Textures {
     public Textures(TextureAtlas uploader) {
         this.textureAtlas = uploader;
 
-        this.button_background = new NineSlicedSpriteDrawable(textureAtlas, ResourceLocation.fromNamespaceAndPath("guflex", "button_background"), 32, 32, 4);
-        this.button_background_off = new NineSlicedSpriteDrawable(textureAtlas, ResourceLocation.fromNamespaceAndPath("guflex", "button_background_off"), 32, 32, 4);
-        this.text_field_background = new NineSlicedSpriteDrawable(textureAtlas, ResourceLocation.fromNamespaceAndPath("guflex", "text_field_background"), 18, 18,1, 1, 1, 1);
+        this.button_background = new NineSlicedSpriteDrawable(ResourceLocation.fromNamespaceAndPath("guflex", "icons/button_background"), 32, 32, 4);
+        this.button_background_off = new NineSlicedSpriteDrawable(ResourceLocation.fromNamespaceAndPath("guflex", "icons/button_background_off"), 32, 32, 4);
+        this.text_field_background = new NineSlicedSpriteDrawable(ResourceLocation.fromNamespaceAndPath("guflex", "icons/text_field_background"), 18, 18,1, 1, 1, 1);
 
 
-        this.menu_icon = new SpriteDrawable(textureAtlas, ResourceLocation.fromNamespaceAndPath("guflex", "menu_icon"), 32, 32);
-        this.close_icon = new SpriteDrawable(textureAtlas, ResourceLocation.fromNamespaceAndPath("guflex", "close_icon"), 36, 36);
-        this.toggle_box_empty = new SpriteDrawable(textureAtlas, ResourceLocation.fromNamespaceAndPath("guflex", "toggle_box_empty"), 36, 36);
-        this.toggle_box_full = new SpriteDrawable(textureAtlas, ResourceLocation.fromNamespaceAndPath("guflex", "toggle_box_full"), 36, 36);
+        this.menu_icon = new SpriteDrawable(ResourceLocation.fromNamespaceAndPath("guflex", "icons/menu_icon"), 32, 32);
+        this.close_icon = new SpriteDrawable(ResourceLocation.fromNamespaceAndPath("guflex", "icons/close_icon"), 36, 36);
+        this.toggle_box_empty = new SpriteDrawable(ResourceLocation.fromNamespaceAndPath("guflex", "icons/toggle_box_empty"), 36, 36);
+        this.toggle_box_full = new SpriteDrawable(ResourceLocation.fromNamespaceAndPath("guflex", "icons/toggle_box_full"), 36, 36);
     }
 
     public TextureAtlas getAtlas(){

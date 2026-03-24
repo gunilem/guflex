@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import guni.guflex.api.runtime.drawable.IDrawable;
 import guni.guflex.api.runtime.register.TextureAtlas;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -12,7 +13,6 @@ import net.neoforged.neoforge.common.util.Size2i;
 import org.joml.Matrix4f;
 
 public class NineSlicedSpriteDrawable implements IDrawable {
-    private final TextureAtlas textureAtlas;
     private final ResourceLocation spriteLocation;
 
     private final int sliceLeft;
@@ -26,10 +26,9 @@ public class NineSlicedSpriteDrawable implements IDrawable {
     private final Size2i baseTextureSize;
 
 
-    public NineSlicedSpriteDrawable(TextureAtlas textureAtlas, ResourceLocation spriteLocation,
+    public NineSlicedSpriteDrawable(ResourceLocation spriteLocation,
                                     int textureWidth, int textureHeight,
                                     int sliceLeft, int sliceRight, int sliceTop, int sliceBottom){
-        this.textureAtlas = textureAtlas;
         this.spriteLocation = spriteLocation;
         
         this.sliceLeft = sliceLeft;
@@ -43,10 +42,9 @@ public class NineSlicedSpriteDrawable implements IDrawable {
         baseTextureSize = new Size2i(textureWidth, textureHeight);
     }
     
-    public NineSlicedSpriteDrawable(TextureAtlas textureAtlas, ResourceLocation spriteLocation,
+    public NineSlicedSpriteDrawable(ResourceLocation spriteLocation,
                                     int textureWidth, int textureHeight,
                                     int slice) {
-        this.textureAtlas = textureAtlas;
         this.spriteLocation = spriteLocation;
 
         this.sliceLeft = slice;
@@ -67,7 +65,7 @@ public class NineSlicedSpriteDrawable implements IDrawable {
 
     @Override
     public void draw(GuiGraphics guiGraphics, int x, int y, int width, int height) {
-        TextureAtlasSprite sprite = textureAtlas.getSprite(spriteLocation);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getGuiSprites().getSprite(spriteLocation);
 
         float minU = sprite.getU0();
         float maxU = sprite.getU1();
@@ -103,7 +101,7 @@ public class NineSlicedSpriteDrawable implements IDrawable {
 
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, textureAtlas.getTextureAtlasLocation());
+        RenderSystem.setShaderTexture(0, sprite.atlasLocation());
 
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);

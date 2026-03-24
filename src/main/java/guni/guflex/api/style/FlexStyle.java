@@ -1,5 +1,7 @@
 package guni.guflex.api.style;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import guni.guflex.api.event.FlexWidgetEventHandler;
 import guni.guflex.api.runtime.screen.IFlexScreen;
 import guni.guflex.api.runtime.widget.IFlexWidget;
@@ -17,7 +19,58 @@ public class FlexStyle {
     public FlexStyle(FlexWidgetEventHandler widgetEventHandler){
         widgetEventHandler.registerWidgetUpdatedEvent(this::cleanDirty);
     }
+    
+    public FlexStyle copyProperties(FlexStylePreset preset){
+        if (preset == null) return this;
+        if (preset.X != null) X = preset.X;
+        if (preset.Y != null) Y = preset.Y;
 
+        if (preset.WIDTH != null) WIDTH = preset.WIDTH;
+        if (preset.HEIGHT != null) HEIGHT = preset.HEIGHT;
+
+        if (preset.LEFT != null) LEFT = preset.LEFT;
+        if (preset.RIGHT != null) RIGHT = preset.RIGHT;
+        if (preset.TOP != null) TOP = preset.TOP;
+        if (preset.BOTTOM != null) BOTTOM = preset.BOTTOM;
+
+        if (preset.MIN_WIDTH != null) MIN_WIDTH = preset.MIN_WIDTH;
+        if (preset.MIN_HEIGHT != null) MIN_HEIGHT = preset.MIN_HEIGHT;
+
+        if (preset.MAX_WIDTH != null) MAX_WIDTH = preset.MAX_WIDTH;
+        if (preset.MAX_HEIGHT != null) MAX_HEIGHT = preset.MAX_HEIGHT;
+
+        if (preset.PADDING_LEFT != null) PADDING_LEFT = preset.PADDING_LEFT;
+        if (preset.PADDING_RIGHT != null) PADDING_RIGHT = preset.PADDING_RIGHT;
+        if (preset.PADDING_TOP != null) PADDING_TOP = preset.PADDING_TOP;
+        if (preset.PADDING_BOTTOM != null) PADDING_BOTTOM = preset.PADDING_BOTTOM;
+
+        if (preset.MARGIN_LEFT != null) MARGIN_LEFT = preset.MARGIN_LEFT;
+        if (preset.MARGIN_RIGHT != null) MARGIN_RIGHT = preset.MARGIN_RIGHT;
+        if (preset.MARGIN_TOP != null) MARGIN_TOP = preset.MARGIN_TOP;
+        if (preset.MARGIN_BOTTOM != null) MARGIN_BOTTOM = preset.MARGIN_BOTTOM;
+
+        if (preset.ITEM_SPACING != null) ITEM_SPACING = preset.ITEM_SPACING;
+
+        if (preset.BOX_SIZING_X != null) BOX_SIZING_X = preset.BOX_SIZING_X;
+        if (preset.BOX_SIZING_Y != null) BOX_SIZING_Y = preset.BOX_SIZING_Y;
+
+        if (preset.FLEX_DIRECTION != null) FLEX_DIRECTION = preset.FLEX_DIRECTION;
+        if (preset.FLEX_LAYOUT != null) FLEX_LAYOUT = preset.FLEX_LAYOUT;
+
+        if (preset.POSITION != null) POSITION = preset.POSITION;
+
+        if (preset.LAYOUT_PRIORITY != null) LAYOUT_PRIORITY = preset.LAYOUT_PRIORITY;
+
+        if (preset.FLEX_GROW != null) FLEX_GROW = preset.FLEX_GROW;
+
+        if (preset.ANCHOR != null) ANCHOR = preset.ANCHOR;
+        if (preset.PIVOT != null) PIVOT = preset.PIVOT;
+
+        setDirty();
+
+        return this;
+    }
+    
     protected int X = 0;
     public FlexStyle setX(int value){ X = value; setDirty(); return this; }
     public int getX(){ return X; }
@@ -25,7 +78,6 @@ public class FlexStyle {
     protected int Y = 0;
     public FlexStyle setY(int value){ Y = value; setDirty(); return this; }
     public int getY(){ return Y; }
-
 
     protected LengthPercentEnumStyle WIDTH = new LengthPercentEnumStyle(LengthPercentEnumStyle.Type.Percent, 1f);
     public FlexStyle setWidth(LengthPercentEnumStyle value){ WIDTH = value; setDirty(); return this; }
@@ -211,5 +263,160 @@ public class FlexStyle {
         FlexRect parentContentRect = parent.rect().getContentRect();
         PositionComputer.position(parentContentRect, widget);
         cleanDirty();
+    }
+    
+    public static class FlexStylePreset {
+        public Integer X = null;
+        public Integer Y = null;
+        
+        public LengthPercentEnumStyle WIDTH = null;
+        public LengthPercentEnumStyle HEIGHT = null;
+
+        public LengthPercentStyle LEFT = null;
+        public LengthPercentStyle RIGHT = null;
+        public LengthPercentStyle TOP = null;
+        public LengthPercentStyle BOTTOM = null;
+
+        public LengthPercentStyle MIN_WIDTH = null;
+        public LengthPercentStyle MIN_HEIGHT = null;
+        
+        public LengthPercentStyle MAX_WIDTH = null;
+        public LengthPercentStyle MAX_HEIGHT = null;
+
+        public LengthPercentStyle PADDING_LEFT = null;
+        public LengthPercentStyle PADDING_RIGHT = null;
+        public LengthPercentStyle PADDING_TOP = null;
+        public LengthPercentStyle PADDING_BOTTOM = null;
+        
+        public LengthPercentStyle MARGIN_LEFT = null;
+        public LengthPercentStyle MARGIN_RIGHT = null;
+        public LengthPercentStyle MARGIN_TOP = null;
+        public LengthPercentStyle MARGIN_BOTTOM = null;
+        
+        public LengthPercentStyle ITEM_SPACING = null;
+        
+        public String BOX_SIZING_X = null;
+        public String BOX_SIZING_Y = null;
+        public String FLEX_DIRECTION = null;
+        public String FLEX_LAYOUT = null;
+        public String POSITION = null;
+
+        public Integer LAYOUT_PRIORITY = null;
+        public Integer FLEX_GROW = null;
+
+        public String ANCHOR = null;
+        public String PIVOT = null;
+
+
+        public void setX(int value){ X = value; }
+        public void setY(int value){ Y = value; }
+
+        public void setWidth(String value){ WIDTH = LengthPercentEnumParser.parse(value, Style.WRAP, Style.AUTO); }
+        public void setHeight(String value){ HEIGHT = LengthPercentEnumParser.parse(value, Style.WRAP, Style.AUTO); }
+
+        public void setLeft(String value){ LEFT = LengthPercentParser.parse(value); }
+        public void setRight(String value){ RIGHT = LengthPercentParser.parse(value); }
+        public void setTop(String value){ TOP = LengthPercentParser.parse(value); }
+        public void setBottom(String value){ BOTTOM = LengthPercentParser.parse(value); }
+
+        public void setMinWidth(String value){ MIN_WIDTH = LengthPercentParser.parse(value); }
+        public void setMinHeight(String value){ MIN_HEIGHT = LengthPercentParser.parse(value); }
+
+        public void setMaxWidth(String value){ MAX_WIDTH = LengthPercentParser.parse(value); }
+        public void setMaxHeight(String value){ MAX_HEIGHT = LengthPercentParser.parse(value); }
+
+        public void setPaddingLeft(String value){ PADDING_LEFT = LengthPercentParser.parse(value); }
+        public void setPaddingRight(String value){ PADDING_RIGHT = LengthPercentParser.parse(value); }
+        public void setPaddingTop(String value){ PADDING_TOP = LengthPercentParser.parse(value); }
+        public void setPaddingBottom(String value){ PADDING_BOTTOM = LengthPercentParser.parse(value); }
+
+        public void setMarginLeft(String value){ MARGIN_LEFT = LengthPercentParser.parse(value); }
+        public void setMarginRight(String value){ MARGIN_RIGHT = LengthPercentParser.parse(value); }
+        public void setMarginTop(String value){ MARGIN_TOP = LengthPercentParser.parse(value); }
+        public void setMarginBottom(String value){ MARGIN_BOTTOM = LengthPercentParser.parse(value); }
+
+        public void setItemSpacing(String value){ ITEM_SPACING = LengthPercentParser.parse(value); }
+
+        public void setBoxSizingX(String value){ BOX_SIZING_X = EnumStyleParser.parse(value, Style.CONTENT_BOX, Style.BORDER_BOX, Style.MARGIN_BOX); }
+        public void setBoxSizingY(String value){ BOX_SIZING_Y = EnumStyleParser.parse(value, Style.CONTENT_BOX, Style.BORDER_BOX, Style.MARGIN_BOX); }
+
+        public void setFlexDirection(String value){ FLEX_DIRECTION = EnumStyleParser.parse(value, Style.NONE, Style.VERTICAL, Style.HORIZONTAL); }
+        public void setFlexLayout(String value){ FLEX_LAYOUT = EnumStyleParser.parse(value, Style.NONE, Style.GRID); }
+        public void setPosition(String value){ POSITION = EnumStyleParser.parse(value, Style.RELATIVE, Style.FIXED, Style.FLEX); }
+
+        public void setLayoutPriority(int value){ LAYOUT_PRIORITY = value; }
+
+        public void setFlexGrow(int value){ FLEX_GROW = value; }
+
+        public void setAnchor(String value){ ANCHOR = EnumStyleParser.parse(value,
+                Style.TOP_LEFT, Style.TOP_RIGHT,
+                Style.BOTTOM_LEFT, Style.BOTTOM_RIGHT,
+                Style.LEFT_CENTER, Style.RIGHT_CENTER,
+                Style.TOP_CENTER, Style.BOTTOM_CENTER,
+                Style.CENTER); }
+        public void setPivot(String value){ PIVOT = EnumStyleParser.parse(value,
+                Style.TOP_LEFT, Style.TOP_RIGHT,
+                Style.BOTTOM_LEFT, Style.BOTTOM_RIGHT,
+                Style.LEFT_CENTER, Style.RIGHT_CENTER,
+                Style.TOP_CENTER, Style.BOTTOM_CENTER,
+                Style.CENTER); }
+        
+        public FlexStylePreset(JsonObject json){
+            if (json == null) return;
+
+            json.entrySet()
+                    .forEach(entry -> setProperty(entry.getKey(), entry.getValue().getAsString()));
+        }
+
+        private void setProperty(String property, String value) {
+            switch (property) {
+                case Style.X -> setX(Integer.parseInt(value));
+                case Style.Y -> setY(Integer.parseInt(value));
+
+                case Style.WIDTH -> setWidth(value);
+                case Style.HEIGHT -> setHeight(value);
+
+                case Style.LEFT -> setLeft(value);
+                case Style.RIGHT -> setRight(value);
+                case Style.TOP -> setTop(value);
+                case Style.BOTTOM -> setBottom(value);
+
+                case Style.MIN_WIDTH -> setMinWidth(value);
+                case Style.MIN_HEIGHT -> setMinHeight(value);
+
+                case Style.MAX_WIDTH -> setMaxWidth(value);
+                case Style.MAX_HEIGHT -> setMaxHeight(value);
+
+                case Style.PADDING_LEFT -> setPaddingLeft(value);
+                case Style.PADDING_RIGHT -> setPaddingRight(value);
+                case Style.PADDING_TOP -> setPaddingTop(value);
+                case Style.PADDING_BOTTOM -> setPaddingBottom(value);
+
+                case Style.MARGIN_LEFT -> setMarginLeft(value);
+                case Style.MARGIN_RIGHT -> setMarginRight(value);
+                case Style.MARGIN_TOP -> setMarginTop(value);
+                case Style.MARGIN_BOTTOM -> setMarginBottom(value);
+
+                case Style.ITEM_SPACING -> setItemSpacing(value);
+
+                case Style.BOX_SIZING_X -> setBoxSizingX(value);
+                case Style.BOX_SIZING_Y -> setBoxSizingY(value);
+
+                case Style.FLEX_DIRECTION -> setFlexDirection(value);
+                case Style.FLEX_LAYOUT -> setFlexLayout(value);
+
+                case Style.POSITION -> setPosition(value);
+
+                case Style.LAYOUT_PRIORITY -> setLayoutPriority(Integer.parseInt(value));
+
+                case Style.FLEX_GROW -> setFlexGrow(Integer.parseInt(value));
+
+                case Style.ANCHOR -> setAnchor(value);
+                case Style.PIVOT -> setPivot(value);
+
+
+                default -> throw new IllegalArgumentException("Unknown property: " + property);
+            }
+        }
     }
 }

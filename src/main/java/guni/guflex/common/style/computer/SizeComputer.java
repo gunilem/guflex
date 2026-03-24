@@ -100,7 +100,8 @@ public final class SizeComputer {
 
         LengthPercentStyle itemSpacingStyle = widget.getStyle().getItemSpacing();
 
-        for (IFlexWidget child : widget.children()) {
+        for (int i = 0; i < widget.children().size(); i++){
+            IFlexWidget child = widget.children().get(i);
             if (!child.displayed()) continue;
             computeFlexWrap(child);
 
@@ -112,6 +113,7 @@ public final class SizeComputer {
             maxWidth = Math.max(maxWidth, rect.getWidth());
             maxHeight = Math.max(maxHeight, rect.getHeight());
 
+            if (i == 0) continue;
             if (flexDirection.equals(Style.HORIZONTAL)){
                 occupiedWidth += itemSpacingStyle.resolve(contentRect.getWidth());
             } else {
@@ -189,6 +191,7 @@ public final class SizeComputer {
                 child.handleMeasuredEvent();
                 continue;
             }
+            if (!child.getStyle().getPosition().equals(Style.FLEX)) continue;
 
             LengthPercentEnumStyle childWidthData = child.getStyle().getWidth();
             LengthPercentEnumStyle childHeightData = child.getStyle().getHeight();
