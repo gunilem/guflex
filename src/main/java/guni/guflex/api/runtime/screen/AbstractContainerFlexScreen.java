@@ -2,6 +2,8 @@ package guni.guflex.api.runtime.screen;
 
 import guni.guflex.api.event.FlexScreenEventHandler;
 import guni.guflex.api.event.inputEvents.*;
+import guni.guflex.api.event.register.EventRegister;
+import guni.guflex.api.event.register.IEventRegistrable;
 import guni.guflex.api.event.screenEvents.*;
 import guni.guflex.api.runtime.widget.BaseFlexPopup;
 import guni.guflex.api.runtime.widget.IFlexWidget;
@@ -24,14 +26,12 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
     protected RootFlexWidget popupRoot;
     protected IRenderDebugEvent.DebugInfo debugInfo;
 
-    protected List<EmptyEvent> delayedOperation = new ArrayList<>();
+    protected List<IEventRegistrable> delayedOperation = new ArrayList<>();
 
     private int tickSinceLastInit;
 
     public AbstractContainerFlexScreen(T menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-
-        eventHandler.release();
     }
 
     @Override
@@ -46,9 +46,9 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
         root.getStyle().setDirty();
         popupRoot.getStyle().setDirty();
 
-        computeWidgets();
+        updateHierarchy();
 
-        eventHandler.invoke(new IScreenInitEvent.Data(this));
+        eventHandler.init.invoke(new IScreenInitEvent.Data(this));
     }
 
     @Override
@@ -87,11 +87,6 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
         super.removed();
         root.handleRemovedEvent();
         popupRoot.handleRemovedEvent();
-    }
-
-    public void computeWidgets(){
-        flushDelayedOperation();
-        updateHierarchy();
     }
 
     private void setupDebugPopup(double mouseX, double mouseY){
@@ -181,22 +176,27 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
         needUpdate = true;
     }
     @Override
-    public void addDelayOperation(EmptyEvent event){
+    public void addDelayOperation(IEventRegistrable event){
         delayedOperation.add(event);
+        needUpdate = true;
     }
 
     protected void flushDelayedOperation(){
-        for (EmptyEvent event : delayedOperation) {
-            event.invoke();
+        List<IEventRegistrable> snapshot = new ArrayList<>(delayedOperation);
+        for (IEventRegistrable listener : snapshot) {
+            delayedOperation.remove(listener);
+            listener.invoke();
         }
-        delayedOperation.clear();
     }
 
-    protected void updateHierarchy(){
+    @Override
+    public void updateHierarchy(){
+        flushDelayedOperation();
+
         if (root.checkDirty()) root.recomputeLayout(null);
         if (popupRoot.checkDirty()) popupRoot.recomputeLayout(null);
 
-        needUpdate = false;
+        needUpdate = !delayedOperation.isEmpty();
     }
 
     @Override
@@ -375,7 +375,7 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
     protected void containerTick() {
         super.containerTick();
         tickSinceLastInit++;
-        eventHandler.invoke(new IScreenTickEvent.Data(tickSinceLastInit));
+        eventHandler.tick.invoke(new IScreenTickEvent.Data(tickSinceLastInit));
     }
 
     @Override
@@ -418,7 +418,6 @@ public abstract class AbstractContainerFlexScreen<T extends AbstractContainerMen
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        flushDelayedOperation();
         if (needUpdate){
             updateHierarchy();
         }

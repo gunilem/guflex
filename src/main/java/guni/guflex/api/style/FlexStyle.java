@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 public class FlexStyle {
 
     public FlexStyle(FlexWidgetEventHandler widgetEventHandler){
-        widgetEventHandler.registerWidgetUpdatedEvent(this::cleanDirty);
+        widgetEventHandler.widget.updated.register(this::cleanDirty);
     }
     
     public FlexStyle copyProperties(FlexStylePreset preset){

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import guni.guflex.api.runtime.drawable.IDrawable;
 import guni.guflex.api.runtime.register.TextureAtlas;
+import guni.guflex.api.utils.ResourceUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
@@ -20,9 +21,6 @@ public class NineSlicedSpriteDrawable implements IDrawable {
     private final int sliceTop;
     private final int sliceBottom;
 
-    private final int textureWidth;
-    private final int textureHeight;
-
     private final Size2i baseTextureSize;
 
 
@@ -35,9 +33,6 @@ public class NineSlicedSpriteDrawable implements IDrawable {
         this.sliceRight = sliceRight;
         this.sliceTop = sliceTop;
         this.sliceBottom = sliceBottom;
-        
-        this.textureWidth = textureWidth;
-        this.textureHeight = textureHeight;
 
         baseTextureSize = new Size2i(textureWidth, textureHeight);
     }
@@ -52,10 +47,31 @@ public class NineSlicedSpriteDrawable implements IDrawable {
         this.sliceTop = slice;
         this.sliceBottom = slice;
 
-        this.textureWidth = textureWidth;
-        this.textureHeight = textureHeight;
-
         baseTextureSize = new Size2i(textureWidth, textureHeight);
+    }
+
+    public NineSlicedSpriteDrawable(ResourceLocation spriteLocation,
+                                    int sliceLeft, int sliceRight, int sliceTop, int sliceBottom){
+        this.spriteLocation = spriteLocation;
+
+        this.sliceLeft = sliceLeft;
+        this.sliceRight = sliceRight;
+        this.sliceTop = sliceTop;
+        this.sliceBottom = sliceBottom;
+
+        this.baseTextureSize = ResourceUtils.getSpriteSizeFromLocation(spriteLocation);
+    }
+
+    public NineSlicedSpriteDrawable(ResourceLocation spriteLocation,
+                                    int slice) {
+        this.spriteLocation = spriteLocation;
+
+        this.sliceLeft = slice;
+        this.sliceRight = slice;
+        this.sliceTop = slice;
+        this.sliceBottom = slice;
+
+        this.baseTextureSize = ResourceUtils.getSpriteSizeFromLocation(spriteLocation);
     }
 
     @Override
@@ -88,16 +104,16 @@ public class NineSlicedSpriteDrawable implements IDrawable {
         int xBottomRight = width + x - sliceRight;
         int yBottomRight = height + y - sliceBottom;
 
-        float maxLeftU = minU + (uSize * ((float)sliceLeft / (float)textureWidth));
-        float maxTopV = minV + (VSize * ((float)sliceTop / (float)textureHeight));
-        float minRightU = maxU - (uSize * ((float)sliceRight / (float)textureWidth));
-        float minBottomV = maxV - (VSize * ((float)sliceBottom / (float)textureHeight));
+        float maxLeftU = minU + (uSize * ((float)sliceLeft / (float)baseTextureSize.width));
+        float maxTopV = minV + (VSize * ((float)sliceTop / (float)baseTextureSize.height));
+        float minRightU = maxU - (uSize * ((float)sliceRight / (float)baseTextureSize.width));
+        float minBottomV = maxV - (VSize * ((float)sliceBottom / (float)baseTextureSize.height));
 
 
-        float maxLineU = maxU - (uSize * ((float)sliceRight / (float)textureWidth));
-        float maxLineV = maxV - (VSize * ((float)sliceBottom / (float)textureHeight));
-        float minLineU = minU + (uSize * ((float)sliceLeft / (float)textureWidth));
-        float minLineV = minV + (VSize * ((float)sliceTop / (float)textureHeight));
+        float maxLineU = maxU - (uSize * ((float)sliceRight / (float)baseTextureSize.width));
+        float maxLineV = maxV - (VSize * ((float)sliceBottom / (float)baseTextureSize.height));
+        float minLineU = minU + (uSize * ((float)sliceLeft / (float)baseTextureSize.width));
+        float minLineV = minV + (VSize * ((float)sliceTop / (float)baseTextureSize.height));
 
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);

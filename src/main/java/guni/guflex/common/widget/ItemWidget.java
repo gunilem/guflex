@@ -17,7 +17,7 @@ public class ItemWidget extends FlexWidget {
 
         getStyle().setWidth("16px").setHeight("16px");
 
-        eventHandler.registerRenderEvent(this::onRender);
+        eventHandler.render.rendered.register(this::onRender);
     }
 
     public ItemWidget(ResourceLocation itemLocation){

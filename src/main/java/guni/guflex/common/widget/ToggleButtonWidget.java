@@ -1,12 +1,12 @@
 package guni.guflex.common.widget;
 
 import guni.guflex.api.event.inputEvents.IMouseClickedEvent;
-import guni.guflex.api.event.register.one.EventRegister;
+import guni.guflex.api.event.register.EventRegister1;
 import guni.guflex.api.runtime.widget.IFlexWidget;
 import guni.guflex.core.registers.Internals;
 
 public class ToggleButtonWidget extends ButtonWidget {
-    public final EventRegister<Boolean> onValueChanged;
+    public final EventRegister1<Boolean> onValueChanged;
 
     protected IFlexWidget onDisplay;
     protected IFlexWidget offDisplay;
@@ -24,7 +24,7 @@ public class ToggleButtonWidget extends ButtonWidget {
         addChild(offDisplay);
 
         updateBackground();
-        onValueChanged = new EventRegister<>();
+        onValueChanged = new EventRegister1<>();
     }
 
     @Override

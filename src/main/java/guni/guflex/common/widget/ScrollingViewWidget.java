@@ -45,17 +45,17 @@ public class ScrollingViewWidget extends FlexWidget {
                 .setFlexDirection(Style.VERTICAL)
                 .setPaddingLeft("5px").setPaddingRight("5px").setPaddingTop("5px").setPaddingBottom("5px");
 
-        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
-        eventHandler.registerMouseReleasedUnconsumedEvent(this::onMouseReleasedUnconsumed);
-        eventHandler.registerMouseScrolledUnconsumedEvent(this::onMouseScrolledUnconsumed);
-        eventHandler.registerMouseDraggedUnconsumedEvent(this::onMouseDraggedUnconsumed);
-        eventHandler.registerMouseClickedConsumedEvent(this::onMouseClickedConsumed);
+        eventHandler.mouse.clicked.unconsumed.register(this::onMouseClickedUnconsumed);
+        eventHandler.mouse.released.unconsumed.register(this::onMouseReleasedUnconsumed);
+        eventHandler.mouse.scrolled.unconsumed.register(this::onMouseScrolledUnconsumed);
+        eventHandler.mouse.dragged.unconsumed.register(this::onMouseDraggedUnconsumed);
+        eventHandler.mouse.clicked.consumed.register(this::onMouseClickedConsumed);
     }
 
     @Override
     public void handleRenderEvent(IRenderEvent.Data event) {
         if (!renderable()) return;
-        eventHandler.invokeRenderEvent(event);
+        eventHandler.render.rendered.invoke(event);
 
         FlexRect contentRect = rect().getContentRect();
         event.guiGraphics().enableScissor(
@@ -86,7 +86,7 @@ public class ScrollingViewWidget extends FlexWidget {
     @Override
     public void handleRenderBackgroundEvent(IRenderBackgroundEvent.Data event) {
         if (!renderable()) return;
-        eventHandler.invokeRenderBackgroundEvent(event);
+        eventHandler.render.background.invoke(event);
 
         FlexRect contentRect = rect().getContentRect();
 
@@ -117,7 +117,7 @@ public class ScrollingViewWidget extends FlexWidget {
     @Override
     public void handleRenderForegroundEvent(IRenderForegroundEvent.Data event) {
         if (!renderable()) return;
-        eventHandler.invokeRenderForegroundEvent(event);
+        eventHandler.render.foreground.invoke(event);
 
         FlexRect contentRect = rect().getContentRect();
         event.guiGraphics().enableScissor(

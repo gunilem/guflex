@@ -1,10 +1,10 @@
 package guni.guflex.api.event.screenEvents;
 
+import guni.guflex.api.event.register.IEventConsumableRegistrable1;
 import net.minecraft.client.gui.GuiGraphics;
 
-public interface IRenderDebugEvent {
+public interface IRenderDebugEvent extends IEventConsumableRegistrable1<IRenderDebugEvent.Data> {
     record Data(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY, int parentXOffset, int parentYOffset, DebugInfo info) {}
-    boolean onEvent(Data data);
 
     class DebugInfo{
         public enum DebugTrigger{

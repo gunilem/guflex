@@ -1,5 +1,5 @@
 package guni.guflex.api.event.inputEvents;
 
-public interface IMouseReleasedConsumedEvent {
-    void onEvent(IMouseReleasedEvent.Data data);
-}
+import guni.guflex.api.event.register.IEventRegistrable1;
+
+public interface IMouseReleasedConsumedEvent extends IEventRegistrable1<IMouseReleasedEvent.Data> {}

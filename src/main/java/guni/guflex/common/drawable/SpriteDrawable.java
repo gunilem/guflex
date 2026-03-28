@@ -1,10 +1,8 @@
 package guni.guflex.common.drawable;
 
 import guni.guflex.api.runtime.drawable.IDrawable;
-import guni.guflex.api.runtime.register.TextureAtlas;
-import net.minecraft.client.Minecraft;
+import guni.guflex.api.utils.ResourceUtils;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.util.Size2i;
 
@@ -16,6 +14,10 @@ public class SpriteDrawable implements IDrawable {
         this.spriteLocation = spriteLocation;
 
         baseTextureSize = new Size2i(textureWidth, textureHeight);
+    }
+    public SpriteDrawable(ResourceLocation spriteLocation){
+        this.spriteLocation = spriteLocation;
+        this.baseTextureSize = ResourceUtils.getSpriteSizeFromLocation(spriteLocation);
     }
 
     @Override

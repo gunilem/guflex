@@ -35,9 +35,9 @@ public class FlexWidget implements IFlexWidget {
         style = new FlexStyle(eventHandler);
         children = new ArrayList<>();
 
-        eventHandler.registerRenderBackgroundEvent(this::onRenderBackground);
-        eventHandler.registerRenderDebugEvent(this::onRenderDebug);
-        eventHandler.registerRenderTooltipsEvent(this::onRenderTooltips);
+        eventHandler.render.background.register(this::onRenderBackground);
+        eventHandler.render.debug.register(this::onRenderDebug);
+        eventHandler.render.tooltips.register(this::onRenderTooltips);
     }
 
     protected void onRenderBackground(IRenderBackgroundEvent.Data data) {
@@ -283,9 +283,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleMouseClickedEvent(event, consumed);
         }
-        eventHandler.invokeMouseClickedEvent(event);
-        if (consumed) eventHandler.invokeMouseClickedConsumedEvent(event);
-        else consumed = eventHandler.invokeMouseClickedUnconsumedEvent(event);
+        eventHandler.mouse.clicked.always.invoke(event);
+        if (consumed) eventHandler.mouse.clicked.consumed.invoke(event);
+        else consumed = eventHandler.mouse.clicked.unconsumed.invoke(event);
         return consumed;
     }
     public boolean handleMouseReleasedEvent(IMouseReleasedEvent.Data event, boolean consumed){
@@ -293,9 +293,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleMouseReleasedEvent(event, consumed);
         }
-        eventHandler.invokeMouseReleasedEvent(event);
-        if (consumed) eventHandler.invokeMouseReleasedConsumedEvent(event);
-        else consumed = eventHandler.invokeMouseReleasedUnconsumedEvent(event);
+        eventHandler.mouse.released.always.invoke(event);
+        if (consumed) eventHandler.mouse.released.consumed.invoke(event);
+        else consumed = eventHandler.mouse.released.unconsumed.invoke(event);
         return consumed;
     }
     public boolean handleMouseScrolledEvent(IMouseScrolledEvent.Data event, boolean consumed){
@@ -303,9 +303,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleMouseScrolledEvent(event, consumed);
         }
-        eventHandler.invokeMouseScrolledEvent(event);
-        if (consumed) eventHandler.invokeMouseScrolledConsumedEvent(event);
-        else consumed = eventHandler.invokeMouseScrolledUnconsumedEvent(event);
+        eventHandler.mouse.scrolled.always.invoke(event);
+        if (consumed) eventHandler.mouse.scrolled.consumed.invoke(event);
+        else consumed = eventHandler.mouse.scrolled.unconsumed.invoke(event);
         return consumed;
     }
     public boolean handleMouseDraggedEvent(IMouseDraggedEvent.Data event, boolean consumed){
@@ -313,9 +313,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleMouseDraggedEvent(event, consumed);
         }
-        eventHandler.invokeMouseDraggedEvent(event);
-        if (consumed) eventHandler.invokeMouseDraggedConsumedEvent(event);
-        else consumed = eventHandler.invokeMouseDraggedUnconsumedEvent(event);
+        eventHandler.mouse.dragged.always.invoke(event);
+        if (consumed) eventHandler.mouse.dragged.consumed.invoke(event);
+        else consumed = eventHandler.mouse.dragged.unconsumed.invoke(event);
         return consumed;
     }
     public boolean handleMouseMovedEvent(IMouseMovedEvent.Data event, boolean consumed){
@@ -323,9 +323,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleMouseMovedEvent(event, consumed);
         }
-        eventHandler.invokeMouseMovedEvent(event);
-        if (consumed) eventHandler.invokeMouseMovedConsumedEvent(event);
-        else consumed = eventHandler.invokeMouseMovedUnconsumedEvent(event);
+        eventHandler.mouse.moved.always.invoke(event);
+        if (consumed) eventHandler.mouse.moved.consumed.invoke(event);
+        else consumed = eventHandler.mouse.moved.unconsumed.invoke(event);
         return consumed;
     }
 
@@ -334,9 +334,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleKeyPressedEvent(event, consumed);
         }
-        eventHandler.invokeKeyPressedEvent(event);
-        if (consumed) eventHandler.invokeKeyPressedConsumedEvent(event);
-        else consumed = eventHandler.invokeKeyPressedUnconsumedEvent(event);
+        eventHandler.key.pressed.always.invoke(event);
+        if (consumed) eventHandler.key.pressed.consumed.invoke(event);
+        else consumed = eventHandler.key.pressed.unconsumed.invoke(event);
         return consumed;
     }
     public boolean handleKeyReleasedEvent(IKeyReleasedEvent.Data event, boolean consumed){
@@ -344,9 +344,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleKeyReleasedEvent(event, consumed);
         }
-        eventHandler.invokeKeyReleasedEvent(event);
-        if (consumed) eventHandler.invokeKeyReleasedConsumedEvent(event);
-        else consumed = eventHandler.invokeKeyReleasedUnconsumedEvent(event);
+        eventHandler.key.released.always.invoke(event);
+        if (consumed) eventHandler.key.released.consumed.invoke(event);
+        else consumed = eventHandler.key.released.unconsumed.invoke(event);
         return consumed;
     }
     public boolean handleCharTypedEvent(ICharTypedEvent.Data event, boolean consumed){
@@ -354,9 +354,9 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             consumed = child.handleCharTypedEvent(event, consumed);
         }
-        eventHandler.invokeCharTypedEvent(event);
-        if (consumed) eventHandler.invokeCharTypedConsumedEvent(event);
-        else consumed = eventHandler.invokeCharTypedUnconsumedEvent(event);
+        eventHandler.key.typed.always.invoke(event);
+        if (consumed) eventHandler.key.typed.consumed.invoke(event);
+        else consumed = eventHandler.key.typed.unconsumed.invoke(event);
         return consumed;
     }
 
@@ -364,21 +364,21 @@ public class FlexWidget implements IFlexWidget {
 
     public void handleRenderEvent(IRenderEvent.Data event){
         if (!renderable()) return;
-        eventHandler.invokeRenderEvent(event);
+        eventHandler.render.rendered.invoke(event);
         for (IFlexWidget child : children){
             child.handleRenderEvent(event);
         }
     }
     public void handleRenderBackgroundEvent(IRenderBackgroundEvent.Data event){
         if (!renderable()) return;
-        eventHandler.invokeRenderBackgroundEvent(event);
+        eventHandler.render.background.invoke(event);
         for (IFlexWidget child : children){
             child.handleRenderBackgroundEvent(event);
         }
     }
     public void handleRenderForegroundEvent(IRenderForegroundEvent.Data event){
         if (!renderable()) return;
-        eventHandler.invokeRenderForegroundEvent(event);
+        eventHandler.render.foreground.invoke(event);
         for (IFlexWidget child : children){
             child.handleRenderForegroundEvent(event);
         }
@@ -388,7 +388,7 @@ public class FlexWidget implements IFlexWidget {
         for (IFlexWidget child : children){
             if (child.handleRenderTooltipsEvent(event)) return true;
         }
-        return eventHandler.invokeRenderTooltipsEvent(event);
+        return eventHandler.render.tooltips.invoke(event);
     }
     public boolean handleRenderDebugEvent(IRenderDebugEvent.Data event){
         if (!renderable()) return false;
@@ -396,50 +396,50 @@ public class FlexWidget implements IFlexWidget {
             IFlexWidget child = children.get(i);
             if (child.handleRenderDebugEvent(event)  && event.info().debugTrigger == IRenderDebugEvent.DebugInfo.DebugTrigger.Hover) return true;
         }
-        return eventHandler.invokeRenderDebugEvent(event);
+        return eventHandler.render.debug.invoke(event);
     }
 
     public void handleShownEvent(){
         if (!displayed) return;
-        eventHandler.invokeWidgetShownEvent();
+        eventHandler.widget.shown.invoke();
         for (IFlexWidget child : children){
             child.handleShownEvent();
         }
     }
     public void handleHiddenEvent(){
         if (displayed) return;
-        eventHandler.invokeWidgetHiddenEvent();
+        eventHandler.widget.hidden.invoke();
         for (IFlexWidget child : children){
             child.handleHiddenEvent();
         }
     }
 
     public void handleAddedEvent(){
-        eventHandler.invokeWidgetAddedEvent();
+        eventHandler.widget.added.invoke();
         for (IFlexWidget child : children){
             child.handleAddedEvent();
         }
     }
     public void handleRemovedEvent(){
-        eventHandler.invokeWidgetRemovedEvent();
+        eventHandler.widget.removed.invoke();
         for (IFlexWidget child : children){
             child.handleRemovedEvent();
         }
     }
 
     public void handleChildAddedEvent(IWidgetChildAddedEvent.Data event){
-        eventHandler.invokeWidgetChildAddedEvent(event);
+        eventHandler.widget.childAdded.invoke(event);
         event.widget().handleAddedEvent();
     }
     public void handleChildRemovedEvent(IWidgetChildRemovedEvent.Data event){
-        eventHandler.invokeWidgetChildRemovedEvent(event);
+        eventHandler.widget.childRemoved.invoke(event);
         event.widget().handleRemovedEvent();
     }
 
-    public void handleMeasuredEvent(){ eventHandler.invokeWidgetMeasuredEvent(); }
-    public void handlePositionedEvent(){ eventHandler.invokeWidgetPositionedEvent(); }
+    public void handleMeasuredEvent(){ eventHandler.widget.measured.invoke(); }
+    public void handlePositionedEvent(){ eventHandler.widget.positioned.invoke(); }
     public void handleUpdatedEvent(){
-        eventHandler.invokeWidgetUpdatedEvent();
+        eventHandler.widget.updated.invoke();
         for (IFlexWidget child : children){
             child.handleUpdatedEvent();
         }

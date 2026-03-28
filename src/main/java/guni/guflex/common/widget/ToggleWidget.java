@@ -1,20 +1,20 @@
 package guni.guflex.common.widget;
 
 import guni.guflex.api.event.inputEvents.IMouseClickedEvent;
-import guni.guflex.api.event.register.one.EventRegister;
+import guni.guflex.api.event.register.EventRegister1;
 import guni.guflex.api.runtime.widget.FlexWidget;
 import guni.guflex.api.style.Style;
 import guni.guflex.core.registers.Internals;
 
 public class ToggleWidget extends FlexWidget {
-    public final EventRegister<Boolean> onValueChanged;
+    public final EventRegister1<Boolean> onValueChanged;
 
     private boolean value;
     private final SpriteWidget toggleBox;
 
     public ToggleWidget(boolean value){
         super();
-        this.onValueChanged = new EventRegister<>();
+        this.onValueChanged = new EventRegister1<>();
 
         this.value = value;
 
@@ -28,8 +28,8 @@ public class ToggleWidget extends FlexWidget {
                 .setWidth("15").setHeight("15");
         addChild(toggleBox);
 
-        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
-        eventHandler.registerWidgetRemovedEvent(this::onRemoved);
+        eventHandler.mouse.clicked.unconsumed.register(this::onMouseClickedUnconsumed);
+        eventHandler.widget.removed.register(this::onRemoved);
     }
 
     protected void onRemoved(){

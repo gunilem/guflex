@@ -1,5 +1,5 @@
 package guni.guflex.api.event.widgetEvents;
 
-public interface IWidgetRemovedEvent {
-    void onEvent();
-}
+import guni.guflex.api.event.register.IEventRegistrable;
+
+public interface IWidgetRemovedEvent extends IEventRegistrable { }

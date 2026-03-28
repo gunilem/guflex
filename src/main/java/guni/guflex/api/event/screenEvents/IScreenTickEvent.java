@@ -1,6 +1,7 @@
 package guni.guflex.api.event.screenEvents;
 
-public interface IScreenTickEvent {
+import guni.guflex.api.event.register.IEventRegistrable1;
+
+public interface IScreenTickEvent extends IEventRegistrable1<IScreenTickEvent.Data> {
     record Data(int tickSinceScreenOpened) {}
-    void onEvent(Data data);
 }

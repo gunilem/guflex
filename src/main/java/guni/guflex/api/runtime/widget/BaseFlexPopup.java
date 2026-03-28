@@ -1,7 +1,7 @@
 package guni.guflex.api.runtime.widget;
 
 import guni.guflex.api.event.inputEvents.*;
-import guni.guflex.api.event.register.one.EventRegister;
+import guni.guflex.api.event.register.EventRegister1;
 import guni.guflex.api.event.screenEvents.*;
 import guni.guflex.api.runtime.screen.IFlexScreen;
 import guni.guflex.api.style.Style;
@@ -11,8 +11,8 @@ import guni.guflex.core.registers.Internals;
 import net.minecraft.client.Minecraft;
 
 public class BaseFlexPopup extends FlexWidget {
-    public final EventRegister<IFlexWidget> onOpened;
-    public final EventRegister<IFlexWidget> onClosed;
+    public final EventRegister1<IFlexWidget> onOpened;
+    public final EventRegister1<IFlexWidget> onClosed;
 
     public final FlexWidget headerWidget;
     public final FlexWidget contentWidget;
@@ -35,8 +35,8 @@ public class BaseFlexPopup extends FlexWidget {
 
         this.zOffset = zOffset;
 
-        this.onOpened = new EventRegister<>();
-        this.onClosed = new EventRegister<>();
+        this.onOpened = new EventRegister1<>();
+        this.onClosed = new EventRegister1<>();
 
         headerWidget = new FlexWidget();
         headerWidget.getStyle().setWidth("100%").setHeight(Style.WRAP);
@@ -67,10 +67,10 @@ public class BaseFlexPopup extends FlexWidget {
 
         setBackground(Internals.getTextures().button_background);
 
-        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
-        eventHandler.registerMouseScrolledUnconsumedEvent(this::onMouseScrolledUnconsumed);
-        eventHandler.registerMouseReleasedUnconsumedEvent(this::onMouseReleasedUnconsumed);
-        eventHandler.registerMouseDraggedUnconsumedEvent(this::onMouseDraggedUnconsumed);
+        eventHandler.mouse.clicked.unconsumed.register(this::onMouseClickedUnconsumed);
+        eventHandler.mouse.scrolled.unconsumed.register(this::onMouseScrolledUnconsumed);
+        eventHandler.mouse.released.unconsumed.register(this::onMouseReleasedUnconsumed);
+        eventHandler.mouse.dragged.unconsumed.register(this::onMouseDraggedUnconsumed);
     }
 
     @Override

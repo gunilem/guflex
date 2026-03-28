@@ -1,10 +1,9 @@
 package guni.guflex.common.widget;
 
 import guni.guflex.api.event.inputEvents.*;
-import guni.guflex.api.event.register.one.EventRegister;
+import guni.guflex.api.event.register.EventRegister1;
 import guni.guflex.api.event.screenEvents.IRenderEvent;
 import guni.guflex.api.event.screenEvents.IScreenTickEvent;
-import guni.guflex.api.runtime.screen.IFlexScreen;
 import guni.guflex.api.runtime.widget.FlexWidget;
 import guni.guflex.api.style.FlexRect;
 import guni.guflex.api.style.Style;
@@ -21,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextField extends FlexWidget {
-    public final EventRegister<String> onValueChanged;
-    public final EventRegister<String> onValueSubmitted;
+    public final EventRegister1<String> onValueChanged;
+    public final EventRegister1<String> onValueSubmitted;
 
     public static class Position{
         public int x;
@@ -61,8 +60,8 @@ public class TextField extends FlexWidget {
             String templateValue
     ) {
         super();
-        this.onValueChanged = new EventRegister<>();
-        this.onValueSubmitted = new EventRegister<>();
+        this.onValueChanged = new EventRegister1<>();
+        this.onValueSubmitted = new EventRegister1<>();
         this.editable = editable;
         this.maxLineLength = maxLineLength;
         this.multiline = multiline;
@@ -84,19 +83,19 @@ public class TextField extends FlexWidget {
 
         setBackground(Internals.getTextures().text_field_background);
 
-        eventHandler.registerRenderEvent(this::onRender);
+        eventHandler.render.rendered.register(this::onRender);
 
-        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
-        eventHandler.registerMouseReleasedUnconsumedEvent(this::onMouseReleasedUnconsumed);
-        eventHandler.registerMouseScrolledUnconsumedEvent(this::onMouseScrolledUnconsumed);
-        eventHandler.registerMouseDraggedUnconsumedEvent(this::onMouseDraggedUnconsumed);
-        eventHandler.registerKeyPressedUnconsumedEvent(this::onKeyPressedUnconsumed);
-        eventHandler.registerCharTypedUnconsumedEvent(this::onCharTypedUnconsumed);
+        eventHandler.mouse.clicked.unconsumed.register(this::onMouseClickedUnconsumed);
+        eventHandler.mouse.released.unconsumed.register(this::onMouseReleasedUnconsumed);
+        eventHandler.mouse.scrolled.unconsumed.register(this::onMouseScrolledUnconsumed);
+        eventHandler.mouse.dragged.unconsumed.register(this::onMouseDraggedUnconsumed);
+        eventHandler.key.pressed.unconsumed.register(this::onKeyPressedUnconsumed);
+        eventHandler.key.typed.unconsumed.register(this::onCharTypedUnconsumed);
 
-        eventHandler.registerMouseClickedConsumedEvent(this::onMouseClickedConsumed);
-        eventHandler.registerMouseReleasedConsumedEvent(this::onMouseReleasedConsumed);
+        eventHandler.mouse.clicked.consumed.register(this::onMouseClickedConsumed);
+        eventHandler.mouse.released.consumed.register(this::onMouseReleasedConsumed);
 
-        eventHandler.registerScreenTickEvent(this::onScreenTick);
+        eventHandler.screen().tick.register(this::onScreenTick);
     }
 
     public boolean isEmpty(){

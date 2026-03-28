@@ -1,22 +1,22 @@
 package guni.guflex.common.widget;
 
 import guni.guflex.api.event.inputEvents.IMouseClickedEvent;
-import guni.guflex.api.event.register.two.EventRegister;
+import guni.guflex.api.event.register.EventRegister2;
 import guni.guflex.api.runtime.widget.FlexWidget;
 import guni.guflex.api.style.Style;
 
 public class ButtonWidget extends FlexWidget {
-    public final EventRegister<Double, Double> onclick;
+    public final EventRegister2<Double, Double> onclick;
 
     public ButtonWidget(){
         super();
-        this.onclick = new EventRegister<>();
+        this.onclick = new EventRegister2<>();
 
         getStyle().setWidth(Style.WRAP).setHeight(Style.WRAP);
 
-        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
+        eventHandler.mouse.clicked.unconsumed.register(this::onMouseClickedUnconsumed);
 
-        eventHandler.registerWidgetRemovedEvent(this::onRemoved);
+        eventHandler.widget.removed.register(this::onRemoved);
     }
 
     protected void onRemoved(){

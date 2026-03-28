@@ -11,7 +11,7 @@ public class SpriteWidget extends FlexWidget {
         super();
         this.sprite = sprite;
 
-        eventHandler.registerRenderEvent(this::onRender);
+        eventHandler.render.rendered.register(this::onRender);
     }
 
     protected void onRender(IRenderEvent.Data event){

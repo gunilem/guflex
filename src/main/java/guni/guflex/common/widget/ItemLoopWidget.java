@@ -23,8 +23,8 @@ public class ItemLoopWidget extends FlexWidget {
 
         getStyle().setWidth("16px").setHeight("16px");
 
-        eventHandler.registerRenderEvent(this::onRender);
-        eventHandler.registerScreenTickEvent(this::onTick);
+        eventHandler.render.rendered.register(this::onRender);
+        eventHandler.screen().tick.register(this::onTick);
     }
 
     public ItemLoopWidget(List<ItemStack> items){

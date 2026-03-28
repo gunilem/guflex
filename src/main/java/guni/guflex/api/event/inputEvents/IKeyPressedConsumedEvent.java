@@ -1,5 +1,5 @@
 package guni.guflex.api.event.inputEvents;
 
-public interface IKeyPressedConsumedEvent {
-    void onEvent(IKeyPressedEvent.Data data);
-}
+import guni.guflex.api.event.register.IEventRegistrable1;
+
+public interface IKeyPressedConsumedEvent extends IEventRegistrable1<IKeyPressedEvent.Data> {}

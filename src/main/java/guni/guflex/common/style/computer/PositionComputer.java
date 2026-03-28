@@ -159,11 +159,10 @@ public class PositionComputer {
                             child.rect().setY(positionY);
                             positionX += childMargin.getWidth() + itemSpacingX;
                         } else {
-                            positionX += contentRect.getX();
+                            positionX = contentRect.getX();
                             positionY += childMargin.getHeight() + itemSpacingY;
                             child.rect().setX(positionX);
                             child.rect().setY(positionY);
-                            positionX += childMargin.getWidth() + itemSpacingX;
                         }
                     }
                 } else {
@@ -187,10 +186,9 @@ public class PositionComputer {
                             positionY += childMargin.getHeight() + itemSpacingY;
                         } else {
                             positionX += childMargin.getWidth() + itemSpacingX;
-                            positionY += contentRect.getY();
+                            positionY = contentRect.getY();
                             child.rect().setX(positionX);
                             child.rect().setY(positionY);
-                            positionY += childMargin.getHeight() + itemSpacingY;
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 package guni.guflex.api.event.inputEvents;
 
-public interface IMouseClickedEvent {
+import guni.guflex.api.event.register.IEventConsumableRegistrable1;
+
+public interface IMouseClickedEvent extends IEventConsumableRegistrable1<IMouseClickedEvent.Data> {
     record Data(int button, double mouseX, double mouseY) {}
-    boolean onEvent(Data data);
 }

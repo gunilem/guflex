@@ -1,7 +1,7 @@
 package guni.guflex.common.widget;
 
 import guni.guflex.api.event.inputEvents.IMouseClickedEvent;
-import guni.guflex.api.event.register.one.EventRegister;
+import guni.guflex.api.event.register.EventRegister1;
 import guni.guflex.api.runtime.widget.BaseFlexPopup;
 import guni.guflex.api.runtime.widget.FlexWidget;
 import guni.guflex.api.style.Style;
@@ -9,7 +9,7 @@ import guni.guflex.core.registers.Internals;
 import net.minecraft.network.chat.Component;
 
 public class DropdownWidget<T extends Enum<?>> extends FlexWidget {
-    public final EventRegister<T> onValueChanged;
+    public final EventRegister1<T> onValueChanged;
 
     protected LabelWidget valueLabel;
     protected T[] data;
@@ -19,7 +19,7 @@ public class DropdownWidget<T extends Enum<?>> extends FlexWidget {
     public DropdownWidget(T[] data){
         super();
         this.data = data;
-        this.onValueChanged = new EventRegister<>();
+        this.onValueChanged = new EventRegister1<>();
 
         currentValue = data[0];
 
@@ -30,9 +30,9 @@ public class DropdownWidget<T extends Enum<?>> extends FlexWidget {
         getStyle().setWidth(Style.WRAP).setHeight(Style.WRAP)
                 .setPaddingLeft("5px").setPaddingRight("5px").setPaddingTop("5px").setPaddingBottom("5px");
 
-        eventHandler.registerMouseClickedUnconsumedEvent(this::onMouseClickedUnconsumed);
+        eventHandler.mouse.clicked.unconsumed.register(this::onMouseClickedUnconsumed);
 
-        eventHandler.registerWidgetRemovedEvent(this::onRemoved);
+        eventHandler.widget.removed.register(this::onRemoved);
     }
 
     protected void onRemoved(){

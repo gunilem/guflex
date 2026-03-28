@@ -1,4 +1,4 @@
-package guni.guflex.api.event.register.zero;
+package guni.guflex.api.event.register;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +19,15 @@ public class EventRegister {
     }
 
     public void invoke(){
-        for (var event : events){
-            event.invoke();
+        List<IEventRegistrable> snapshot = new ArrayList<>(events);
+        for (IEventRegistrable listener : snapshot) {
+            listener.invoke();
+        }
+    }
+    public void inverseReversed(){
+        List<IEventRegistrable> snapshot = new ArrayList<>(events.reversed());
+        for (IEventRegistrable listener : snapshot) {
+            listener.invoke();
         }
     }
 

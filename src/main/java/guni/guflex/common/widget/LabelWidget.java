@@ -31,14 +31,14 @@ public class LabelWidget extends FlexWidget {
 
         if (text == null) return;
 
-        eventHandler.registerRenderEvent(this::onRender);
+        eventHandler.render.rendered.register(this::onRender);
 
         if (!multiline) {
             getStyle().setWidth(font.width(text) + "px").setHeight(font.lineHeight + "px")
                             .setAnchor(Style.CENTER).setPivot(Style.CENTER);
         }
         else {
-            eventHandler.registerWidgetMeasuredEvent(this::onMeasured);
+            eventHandler.widget.measured.register(this::onMeasured);
 
             getStyle().setAnchor(Style.TOP_CENTER).setPivot(Style.TOP_CENTER);
         }
